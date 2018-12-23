@@ -1,0 +1,38 @@
+version: '3'
+services:
+  career:
+    restart: always
+    build: Dockerfiles/career/
+    command: >
+      bash -c 'python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py collectstatic --no-input &&
+      gunicorn -b 0.0.0.0:8000 career.wsgi'
+    env_file:
+      - career.env
+    ports:
+     - "8000:8000"
+    working_dir: /code/
+    volumes:
+     - .:/code
+     - ./static/:/code/static
+    networks:
+     - career-network
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+     - "80:80"
+     - "443:443"
+    volumes:
+     - ./Dockerfiles/nginx/:/etc/nginx
+     - ./static:/www/static
+     - ./cert:/etc/nginx/certs:ro
+     - ./media:/media
+    depends_on:
+     - career
+    networks:
+     - career-network
+networks:
+  career-network:
+    external: false
