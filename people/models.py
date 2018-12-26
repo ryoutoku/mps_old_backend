@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class User(models.Model):
@@ -13,7 +14,7 @@ class User(models.Model):
     open_status     : 働けるか否か
     interested_work : 興味のある業種
 
-    bank_company        : 銀行名
+    bank_name        : 銀行名
     bank_office_code    : 銀行支店コード
     bank_account_type   : 口座種類
     bank_account_number : 口座番号
@@ -28,13 +29,13 @@ class User(models.Model):
     working_status = models.CharField(max_length=16)
     work_style = models.CharField(max_length=16)
     hope_fee = models.IntegerField()
-    open_status = models.CharField()
+    open_status = models.CharField(max_length=16)
     interested_work = models.TextField()
 
-    bank_company = models.CharField(max_length=50)
+    bank_name = models.CharField(max_length=50)
     bank_office_code = models.CharField(max_length=50)
     bank_account_type = models.CharField(max_length=50)
-    bank_account_number = models.CharField()
+    bank_account_number = models.CharField(max_length=16)
 
     joined_date = models.DateTimeField(default=timezone.now)
     defected_date = models.DateField(null=True, blank=True)
@@ -60,13 +61,13 @@ class Career(models.Model):
     project_name = models.CharField(max_length=50)
     started_at = models.DateField()
     ended_at = models.DateField(null=True, blank=True)
-    position = models.CharField()
-    scale = models.CharField()
-    tools = models.CharField()
+    position = models.CharField(max_length=16)
+    scale = models.CharField(max_length=16)
+    tools = models.CharField(max_length=16)
     details = models.TextField()
 
     class Meta:
-        ordering = ("start_at")
+        ordering = ("started_at", )
 
     def __str__(self):
         return str(project_name)

@@ -15,6 +15,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'certification',
+    'company',
+    'people',
+    'resume',
+    'negotiation',
 ]
 
 MIDDLEWARE = [
@@ -77,3 +82,5 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'certification.User'

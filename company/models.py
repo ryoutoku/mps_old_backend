@@ -1,9 +1,8 @@
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
 
-
-class Campany(models.Model):
+class Company(models.Model):
     """企業の経験情報を管理するクラス
 
     name                        : 企業名
@@ -47,14 +46,11 @@ class Campany(models.Model):
     joined_date = models.DateTimeField(default=timezone.now)
     defected_date = models.DateField(null=True, blank=True)
 
-    class Meta:
-        ordering = ("start_at")
-
     def __str__(self):
         return str(name)
 
 
-class Projects(models.Model):
+class Project(models.Model):
     """案件を表すクラス
     name                : 案件名
     min_fee             : 最小単金
@@ -78,10 +74,10 @@ class Projects(models.Model):
     preferred_skills    : 尚可スキル
     """
 
-    name = models.CharField()
+    name = models.CharField(max_length=16)
     min_fee = models.IntegerField()
     max_fee = models.IntegerField()
-    workplace = models.CharField()
+    workplace = models.CharField(max_length=16)
     closest_station = models.CharField(max_length=50)
     start_term = models.DateField(),
     end_term = models.DateField(null=True, blank=True)
@@ -89,12 +85,15 @@ class Projects(models.Model):
     end_time = models.TimeField()
     rest_time = models.TimeField()
 
-    garments = models.CharField(null=True, blank=True)
-    restroom = models.CharField(null=True, blank=True)
-    conditions = models.CharField(null=True, blank=True)
+    garments = models.CharField(max_length=16, null=True, blank=True)
+    restroom = models.CharField(max_length=16, null=True, blank=True)
+    conditions = models.CharField(max_length=16, null=True, blank=True)
 
     content = models.TextField()
     appeal = models.TextField()
 
     required_skills = models.TextField(null=True, blank=True)
     preferred_skills = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(name)

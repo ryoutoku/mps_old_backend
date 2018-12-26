@@ -19,8 +19,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from company.urls import router as company_router
+from people.urls import router as people_router
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('company/', include(company_router.urls)),
+    path('user/', include(people_router.urls)),
 ] +  \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
     static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
