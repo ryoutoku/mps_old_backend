@@ -2,12 +2,12 @@
 
 from rest_framework import serializers
 
-from .models import User, Career
+from .models import Worker, Career
 
 
-class UserSerializer(serializers.ModelSerializer):
+class WorkerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Worker
         fields = (
             "last_name",
             "fist_name",

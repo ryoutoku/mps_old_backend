@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'certification',
     'company',
-    'people',
+    'worker',
     'resume',
     'negotiation',
 ]
