@@ -6,6 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
 
+from company.models import Company
+from worker.models import Worker
+
 
 class UserManager(BaseUserManager):
     """ユーザーマネージャー."""
@@ -28,35 +31,22 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
 
-        if 0 <= extra_fields.get('attribute') < 2:
-            raise ValueError('Attribute must have attribute is 0 or 1')
-
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
         """スーパーユーザーは、is_staffとis_superuserをTrueに"""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('attribute', 2)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        if extra_fields.get('attribute') != 2:
-            raise ValueError('Superuser must have attribute=2')
 
         return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """カスタムユーザーモデル."""
-
-    STATE_CHOICES = (
-        (0, 'people'),
-        (1, 'company'),
-        (2, 'staff'),
-    )
     email = models.EmailField(_('email address'), unique=True)
     is_staff = models.BooleanField(
         _('staff status'),
@@ -72,14 +62,18 @@ class User(AbstractBaseUser, PermissionsMixin):
             'Unselect this instead of deleting accounts.'
         ),
     )
-    attribute = models.IntegerField(
-        choices=STATE_CHOICES,
-        help_text=_('Attribute for this user.'),
-    )
     joined_at = models.DateField(
         _('joined at'), default=timezone.now,
         help_text=_("User joined date")
     )
+
+    company = models.OneToOneField(
+        Company, on_delete=models.CASCADE, related_name='account',
+        verbose_name="企業名", null=True, blank=True)
+
+    worker = models.OneToOneField(
+        Worker, on_delete=models.CASCADE, related_name='account',
+        verbose_name="ユーザ名", null=True, blank=True)
 
     objects = UserManager()
 
@@ -103,3 +97,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         メールアドレスを返す
         """
         return self.email
+
+
+class SignUpToken(models.Model):
+    """ユーザのトークンを管理する
+    """
+
+    token = models.TextField(verbose_name="アクセストークン")
+
+    expiration_date = models.DateTimeField(default=timezone.now,
+                                           verbose_name="有効期限")
+
+    def __str__(self):
+        return str(self.token)

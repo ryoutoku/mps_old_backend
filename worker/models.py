@@ -22,10 +22,15 @@ class Worker(models.Model):
     )
 
     last_name = models.CharField(max_length=16,
+
                                  verbose_name="氏")
+
     first_name = models.CharField(max_length=16,
+
                                   verbose_name="名")
+
     mail_address = models.EmailField(
+
         verbose_name="メールアドレス")
     working_status = models.CharField(max_length=16,
                                       verbose_name="稼働中か否か")
@@ -54,7 +59,7 @@ class WorkerBank(models.Model):
     """ユーザの銀行口座情報
     """
     worker = models.ForeignKey(
-        'Worker', on_delete=models.CASCADE, related_name='bank',
+        Worker, on_delete=models.CASCADE, related_name='banks',
         verbose_name="対応ユーザ")
     name = models.CharField(max_length=50,
                             verbose_name="銀行名")
@@ -73,7 +78,7 @@ class Career(models.Model):
     """ユーザの経験情報を管理するクラス
     """
     worker = models.ForeignKey(
-        'Worker', on_delete=models.CASCADE, related_name='career',
+        Worker, on_delete=models.CASCADE, related_name='careers',
         verbose_name="対応ユーザ")
 
     project_name = models.CharField(max_length=50,
