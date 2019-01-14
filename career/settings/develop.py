@@ -9,3 +9,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+AWS_SES_ACCESS_KEY_ID = 'your access key'
+AWS_SES_SECRET_ACCESS_KEY = 'your secret key'

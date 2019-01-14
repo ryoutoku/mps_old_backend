@@ -8,6 +8,12 @@ from .models import User
 from .selializer import UserSerializer
 
 
-class UserViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+# class UserViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+# class UserViewSet(viewsets.ModelViewSet):
+
+class UserViewSet(
+        mixins.RetrieveModelMixin,
+        viewsets.GenericViewSet):
+
     queryset = User.objects.all()
     serializer_class = UserSerializer

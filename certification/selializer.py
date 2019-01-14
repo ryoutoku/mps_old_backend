@@ -11,5 +11,4 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "email",
             "password",
-            "attribute"
         )

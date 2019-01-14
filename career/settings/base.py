@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_ses',
     'rest_framework',
     'certification',
     'company',
@@ -90,3 +91,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'certification.User'
+
+EMAIL_BACKEND = 'django_ses.SESBackend'

@@ -10,6 +10,12 @@ from company.models import Company
 from worker.models import Worker
 
 
+TOKEN_ATTRIBUTE = (
+    (0, "company"),
+    (1, "worker")
+)
+
+
 class UserManager(BaseUserManager):
     """ユーザーマネージャー."""
 
@@ -47,13 +53,16 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     email = models.EmailField(_('email address'), unique=True)
+
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
         help_text=_(
             'Designates whether the user can log into this admin site.'),
     )
+
     is_active = models.BooleanField(
         _('active'),
         default=True,
@@ -62,10 +71,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             'Unselect this instead of deleting accounts.'
         ),
     )
+
     joined_at = models.DateField(
         _('joined at'), default=timezone.now,
         help_text=_("User joined date")
     )
+
+    defected_at = models.DateField(null=True, blank=True,
+                                   verbose_name="退会年月日")
 
     company = models.OneToOneField(
         Company, on_delete=models.CASCADE, related_name='account',
@@ -104,6 +117,11 @@ class SignUpToken(models.Model):
     """
 
     token = models.TextField(verbose_name="アクセストークン")
+
+    attribute = models.IntegerField(
+        choices=TOKEN_ATTRIBUTE,
+        default=1,
+        verbose_name="トークンの属性")
 
     expiration_date = models.DateTimeField(default=timezone.now,
                                            verbose_name="有効期限")

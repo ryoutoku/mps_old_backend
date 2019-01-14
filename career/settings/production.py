@@ -13,3 +13,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
+
+AWS_SES_ACCESS_KEY_ID = 'your access key'
+AWS_SES_SECRET_ACCESS_KEY = 'your secret key'
