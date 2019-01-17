@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import Worker, Career
+from .models import Worker, Career, WorkerBank
 
 
 class WorkerSerializer(serializers.ModelSerializer):
@@ -10,17 +10,25 @@ class WorkerSerializer(serializers.ModelSerializer):
         model = Worker
         fields = (
             "last_name",
-            "fist_name",
-            "mail_address",
+            "first_name",
             "working_status",
             "work_style",
             "hope_fee",
             "open_status",
             "interested_work",
-            "bank_name",
-            "bank_office_code",
-            "bank_account_type",
-            "bank_account_number",
+            "qiita_url",
+            "github_url"
+        )
+
+
+class BankSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkerBank
+        fields = (
+            "name",
+            "office_code",
+            "account_type",
+            "account_number"
         )
 
 

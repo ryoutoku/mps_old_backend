@@ -1,11 +1,12 @@
 # coding: utf-8
 from django.urls import path
 from rest_framework import routers
-from .viewset import UserViewSet
+from .viewset import LoginViewSet, LogoutViewSet
 from .views import UserCreateView, SuccessView, FailureView, CompanyCreateView
 
 router = routers.DefaultRouter()
-router.register(r'login', UserViewSet)
+router.register('login', LoginViewSet)
+router.register('logout', LogoutViewSet)
 
 
 urlpatterns = [

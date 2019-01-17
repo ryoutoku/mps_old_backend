@@ -41,7 +41,7 @@ class MyUserAdmin(UserAdmin):
     form = MyUserChangeForm
     add_form = MyUserCreationForm
     list_display = ('email', 'worker_name',
-                    'company', 'is_active', 'is_staff',  'defected_at')
+                    'company_name', 'is_active', 'is_staff',  'defected_at')
     list_filter = ('is_staff', 'is_superuser',
                    'is_active', 'groups')
     search_fields = ('email', 'is_superuser', 'is_active')

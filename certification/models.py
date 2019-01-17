@@ -1,10 +1,11 @@
 from django.db import models
-from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
+
 
 from company.models import Company
 from worker.models import Worker
@@ -36,7 +37,6 @@ class UserManager(BaseUserManager):
         """is_staff(管理サイトにログインできるか)と、is_superuer(全ての権限)をFalseに"""
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
@@ -82,11 +82,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     company = models.OneToOneField(
         Company, on_delete=models.CASCADE, related_name='account',
-        verbose_name="企業名", null=True, blank=True)
+        verbose_name="企業名", null=True, blank=True, unique=True)
 
     worker = models.OneToOneField(
         Worker, on_delete=models.CASCADE, related_name='account',
-        verbose_name="ユーザ名", null=True, blank=True)
+        verbose_name="ユーザ名", null=True, blank=True, unique=True)
 
     objects = UserManager()
 
@@ -98,9 +98,31 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
-        send_mail(subject, message, from_email, [self.email], **kwargs)
+    def clean(self):
+        self._user_check()
+        self._staff_check()
+        return super().clean()
+
+    def _user_check(self):
+        if not self.is_staff:
+            if (self.worker is None and self.company is None) or \
+                    (self.worker and self.company):
+                raise ValidationError(
+                    {
+                        'worker': _('set if this user is worker'),
+                        'company': _('set if this user is company'),
+                    }
+                )
+
+    def _staff_check(self):
+        if self.is_staff or self.is_superuser:
+            if (self.worker is not None or self.company is not None):
+                raise ValidationError(
+                    {
+                        'worker': _('do not set if this user is staff or superuser'),
+                        'company': _('do not set if this user is staff or superuser'),
+                    }
+                )
 
     @property
     def username(self):
