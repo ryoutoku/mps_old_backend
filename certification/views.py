@@ -5,16 +5,13 @@ from django.contrib import messages
 
 from datetime import datetime
 from .models import User, SignUpToken
-from .forms import UserModelForm
-
-from company.models import Company
-from worker.models import Worker
+from .forms import WorkerModelForm, CompanyModelForm
 
 
 class SignUpBaseCreateView(CreateView):
 
     model = User
-    form_class = UserModelForm
+    form_class = None
     template_name = "./signup/index.html"
     success_url = "./success"
     failure_url = "./failure"
@@ -41,6 +38,7 @@ class SignUpBaseCreateView(CreateView):
 
 class UserCreateView(SignUpBaseCreateView):
     worker = 1
+    form_class = WorkerModelForm
 
     def get(self, request, **kwargs):
         print(request.GET)
@@ -48,21 +46,19 @@ class UserCreateView(SignUpBaseCreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-
-        user.worker = Worker.objects.create()
         user.save()
         return HttpResponseRedirect(self.success_url)
 
 
 class CompanyCreateView(SignUpBaseCreateView):
     company = 0
+    form_class = CompanyModelForm
 
     def get(self, request, **kwargs):
         return super().get(request, self.company, **kwargs)
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.company = Company.objects.create()
         user.save()
         return HttpResponseRedirect(self.success_url)
 

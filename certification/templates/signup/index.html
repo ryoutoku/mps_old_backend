@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
+<head>
+    <title>Create Author</title>
+</head>
 
-    </head>
-
-    <body>
-        <form method="post">
-            {% csrf_token %}
-            <table>
-                {{ form }}
-            </table>
-            <input type="submit">
-        </form>
-
-    </body>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            {{ form.formset.as_table}}
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
 
 </html>
