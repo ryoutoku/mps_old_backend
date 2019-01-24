@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import Worker, Career, WorkerBank
+from .models import Worker, Resume, WorkerBank
 
 
 class WorkerSerializer(serializers.ModelSerializer):
@@ -32,9 +32,9 @@ class BankSerializer(serializers.ModelSerializer):
         )
 
 
-class CareerSerializer(serializers.ModelSerializer):
+class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Career
+        model = Resume
         fields = (
             "project_name",
             "started_at",

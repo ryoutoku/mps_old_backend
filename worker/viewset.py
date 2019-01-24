@@ -3,8 +3,8 @@ from rest_framework import viewsets, filters
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Worker, Career, WorkerBank
-from .selializer import WorkerSerializer, CareerSerializer, BankSerializer
+from .models import Worker, Resume, WorkerBank
+from .selializer import WorkerSerializer, ResumeSerializer, BankSerializer
 
 
 class WorkerViewSet(viewsets.ModelViewSet):
@@ -28,9 +28,9 @@ class BankViewSet(viewsets.ModelViewSet):
     serializer_class = BankSerializer
 
 
-class CareerViewSet(viewsets.ModelViewSet):
+class ResumeViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (IsAuthenticated,)
 
-    queryset = Career.objects.all()
-    serializer_class = CareerSerializer
+    queryset = Resume.objects.all()
+    serializer_class = ResumeSerializer

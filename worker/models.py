@@ -78,11 +78,11 @@ class WorkerBank(models.Model):
         return f"{self.name}"
 
 
-class Career(models.Model):
+class Resume(models.Model):
     """ユーザの経験情報を管理するクラス
     """
     worker = models.ForeignKey(
-        Worker, on_delete=models.CASCADE, related_name='careers',
+        Worker, on_delete=models.CASCADE, related_name='resumes',
         verbose_name="対応ユーザ")
 
     project_name = models.CharField(max_length=50,
