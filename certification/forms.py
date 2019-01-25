@@ -37,7 +37,8 @@ WorkerFormSet = inlineformset_factory(
     parent_model=Worker,
     model=User,
     form=UserModelForm,
-    extra=3
+    extra=1,
+    can_delete=False
 )
 
 
@@ -49,14 +50,11 @@ class WorkerModelForm(ModelFormWithFormSetMixin, forms.ModelForm):
         fields = ()
 
     def save(self, commit=True):
-        saved_instance = super().save(commit)
-        instance = self.formset.save(commit)
-        print(type(saved_instance))
-        print(type(instance))
-        print(saved_instance)
-        print(instance)
-        print(super)
-        print(self.formset)
+        saved_instance = super().save(commit=True)
+        instance = self.formset.save()
+        instance[0].worker = saved_instance
+        instance[0].save()
+
         return saved_instance
 
 
@@ -65,6 +63,8 @@ CompanyFormSet = inlineformset_factory(
     model=User,
     form=UserModelForm,
     extra=3
+
+
 )
 
 
@@ -78,4 +78,6 @@ class CompanyModelForm(ModelFormWithFormSetMixin, forms.ModelForm):
     def save(self, commit=True):
         saved_instance = super().save(commit)
         instance = self.formset.save(commit)
+        instance[0].company = saved_instance
+        instance[0].save()
         return saved_instance

@@ -44,11 +44,6 @@ class UserCreateView(SignUpBaseCreateView):
         print(request.GET)
         return super().get(request, self.worker, **kwargs)
 
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        user.save()
-        return HttpResponseRedirect(self.success_url)
-
 
 class CompanyCreateView(SignUpBaseCreateView):
     company = 0
@@ -56,11 +51,6 @@ class CompanyCreateView(SignUpBaseCreateView):
 
     def get(self, request, **kwargs):
         return super().get(request, self.company, **kwargs)
-
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        user.save()
-        return HttpResponseRedirect(self.success_url)
 
 
 class SuccessView(TemplateView):
