@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from certification.models import User
+
 WORKING_STATUS_CHOICES = (
     (0, 'now'),
     (1, 'after 1week'),
@@ -21,6 +23,9 @@ WORK_STYLE_CHOICES = (
 class Worker(models.Model):
     """ユーザの一般情報を管理するクラス
     """
+    account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker',
+                                   verbose_name="アカウント情報", null=True, blank=True, unique=True)
+
     is_activate = models.BooleanField(default=False,
                                       verbose_name="入力が完了したか否か")
 

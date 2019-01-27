@@ -1,3 +1,5 @@
+import secrets
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
@@ -5,8 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from .models import User, SignUpToken
 from django import forms
 from django.utils.html import format_html
-
-import secrets
 
 
 class MyUserChangeForm(UserChangeForm):
@@ -35,7 +35,7 @@ class MyUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', "worker", "company", "is_staff", "is_superuser"),
+            'fields': ('email', 'password1', 'password2',  "is_staff", "is_superuser"),
         }),
     )
     form = MyUserChangeForm

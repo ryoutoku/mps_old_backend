@@ -1,10 +1,15 @@
 from django.db import models
 from django.utils import timezone
 
+from certification.models import User
+
 
 class Company(models.Model):
     """企業の情報を管理するクラス
     """
+
+    account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='company',
+                                   verbose_name="アカウント情報", null=True, blank=True, unique=True)
 
     is_activate = models.BooleanField(default=False,
                                       verbose_name="入力が完了したか否か")
@@ -17,9 +22,6 @@ class Company(models.Model):
 
     phone_number = models.CharField(max_length=50, null=True, blank=True,
                                     verbose_name="電話番号")
-
-    mail_address = models.EmailField(max_length=50, null=True, blank=True,
-                                     verbose_name="メールアドレス")
 
     address = models.CharField(max_length=50, null=True, blank=True,
                                verbose_name="企業住所")

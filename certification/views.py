@@ -36,12 +36,11 @@ class SignUpBaseCreateView(CreateView):
         return super().get(request, **kwargs)
 
 
-class UserCreateView(SignUpBaseCreateView):
+class WorkerCreateView(SignUpBaseCreateView):
     worker = 1
     form_class = WorkerModelForm
 
     def get(self, request, **kwargs):
-        print(request.GET)
         return super().get(request, self.worker, **kwargs)
 
 

@@ -6,19 +6,6 @@ from worker.models import Worker
 from company.models import Company
 
 
-class ModelFormWithFormSetMixin:
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.formset = self.formset_class(
-            instance=self.instance,
-            data=self.data if self.is_bound else None,
-        )
-
-    def is_valid(self):
-        return super().is_valid() and self.formset.is_valid()
-
-
 class UserModelForm(forms.ModelForm):
     class Meta:
         model = User
@@ -33,51 +20,17 @@ class UserModelForm(forms.ModelForm):
     )
 
 
-WorkerFormSet = inlineformset_factory(
-    parent_model=Worker,
-    model=User,
-    form=UserModelForm,
-    extra=1,
-    can_delete=False
-)
-
-
-class WorkerModelForm(ModelFormWithFormSetMixin, forms.ModelForm):
-    formset_class = WorkerFormSet
-
-    class Meta:
-        model = Worker
-        fields = ()
-
+class WorkerModelForm(UserModelForm):
     def save(self, commit=True):
-        saved_instance = super().save(commit=True)
-        instance = self.formset.save()
-        instance[0].worker = saved_instance
-        instance[0].save()
-
-        return saved_instance
+        user = super().save(commit=True)
+        worker = Worker.objects.create(account=user)
+        worker.save()
+        return user
 
 
-CompanyFormSet = inlineformset_factory(
-    parent_model=Company,
-    model=User,
-    form=UserModelForm,
-    extra=3
-
-
-)
-
-
-class CompanyModelForm(ModelFormWithFormSetMixin, forms.ModelForm):
-    formset_class = CompanyFormSet
-
-    class Meta:
-        model = User
-        fields = ()
-
+class CompanyModelForm(UserModelForm):
     def save(self, commit=True):
-        saved_instance = super().save(commit)
-        instance = self.formset.save(commit)
-        instance[0].company = saved_instance
-        instance[0].save()
-        return saved_instance
+        user = super().save(commit=True)
+        company = Company.objects.create(account=user)
+        company.save()
+        return user

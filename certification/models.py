@@ -7,10 +7,6 @@ from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
 
 
-from company.models import Company
-from worker.models import Worker
-
-
 TOKEN_ATTRIBUTE = (
     (0, "company"),
     (1, "worker")
@@ -80,14 +76,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     defected_at = models.DateField(null=True, blank=True,
                                    verbose_name="退会年月日")
 
-    company = models.OneToOneField(
-        Company, on_delete=models.CASCADE, related_name='account',
-        verbose_name="企業名", null=True, blank=True, unique=True)
-
-    worker = models.OneToOneField(
-        Worker, on_delete=models.CASCADE, related_name='account',
-        verbose_name="ユーザ名", null=True, blank=True, unique=True)
-
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
@@ -105,6 +93,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def _user_check(self):
         if not self.is_staff:
+            print(type(self))
+            print(dir(self))
+            pass
+            """
             if (self.worker is None and self.company is None) or \
                     (self.worker and self.company):
                 raise ValidationError(
@@ -113,9 +105,12 @@ class User(AbstractBaseUser, PermissionsMixin):
                         'company': _('set if this user is company'),
                     }
                 )
+            """
 
     def _staff_check(self):
         if self.is_staff or self.is_superuser:
+            pass
+            """
             if (self.worker is not None or self.company is not None):
                 raise ValidationError(
                     {
@@ -123,6 +118,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                         'company': _('do not set if this user is staff or superuser'),
                     }
                 )
+            """
 
     @property
     def username(self):
