@@ -86,40 +86,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def clean(self):
-        self._user_check()
-        self._staff_check()
-        return super().clean()
-
-    def _user_check(self):
-        if not self.is_staff:
-            print(type(self))
-            print(dir(self))
-            pass
-            """
-            if (self.worker is None and self.company is None) or \
-                    (self.worker and self.company):
-                raise ValidationError(
-                    {
-                        'worker': _('set if this user is worker'),
-                        'company': _('set if this user is company'),
-                    }
-                )
-            """
-
-    def _staff_check(self):
-        if self.is_staff or self.is_superuser:
-            pass
-            """
-            if (self.worker is not None or self.company is not None):
-                raise ValidationError(
-                    {
-                        'worker': _('do not set if this user is staff or superuser'),
-                        'company': _('do not set if this user is staff or superuser'),
-                    }
-                )
-            """
-
     @property
     def username(self):
         """username属性のゲッター

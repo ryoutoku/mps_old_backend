@@ -25,7 +25,7 @@ class MyUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Attributes'), {'fields': ('worker', 'company',)}),
+        (_('Attributes'), {'fields': ('worker_name', 'company_name',)}),
         (_('Permissions'), {'fields': (
             'is_active', 'is_staff', 'is_superuser',
             'groups', 'user_permissions')}),
@@ -40,11 +40,10 @@ class MyUserAdmin(UserAdmin):
     )
     form = MyUserChangeForm
     add_form = MyUserCreationForm
-    list_display = ('email', 'worker_name',
-                    'company_name', 'is_active', 'is_staff',  'defected_at')
-    list_filter = ('is_staff', 'is_superuser',
-                   'is_active', 'groups')
-    search_fields = ('email', 'is_superuser', 'is_active')
+    list_display = ('email', 'worker_name', 'company_name',
+                    'is_active', 'is_staff',  'defected_at')
+    list_filter = ('email', 'is_active', 'is_staff', 'is_superuser', 'groups')
+    search_fields = ('is_superuser', 'is_active')
     ordering = ('email',)
 
     _worker_link_format = "<a href='../../worker/worker/{}/change'>{}<\a>"
@@ -61,6 +60,9 @@ class MyUserAdmin(UserAdmin):
             return format_html(self._company_link_format,
                                obj.company.id, str(obj.company))
         return None
+
+    worker_name.admin_order_field = 'worker__account'
+    company_name.admin_order_field = 'company__account'
 
 
 admin.site.register(User, MyUserAdmin)
