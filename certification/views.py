@@ -2,6 +2,7 @@ from django.views.generic import TemplateView, CreateView
 from django.utils.timezone import utc
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 
 from datetime import datetime
 from .models import User, SignUpToken
@@ -34,6 +35,12 @@ class SignUpBaseCreateView(CreateView):
             HttpResponseRedirect(self.failure_url)
 
         return super().get(request, **kwargs)
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.password = make_password(user.password)
+        user.save()
+        return HttpResponseRedirect(self.success_url)
 
 
 class WorkerCreateView(SignUpBaseCreateView):
