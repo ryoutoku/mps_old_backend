@@ -13,6 +13,8 @@ class CompanyAdminForm(ModelForm):
         fields = "__all__"
 
     def clean_account(self):
+        """accountが正しく設定できているかの追加確認
+        """
 
         account = self.cleaned_data["account"]
         user = User.objects.filter(email=account).first()

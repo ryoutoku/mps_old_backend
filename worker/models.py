@@ -24,7 +24,7 @@ class Worker(models.Model):
     """ユーザの一般情報を管理するクラス
     """
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker',
-                                   verbose_name="アカウント情報", null=True, blank=True, unique=True)
+                                   verbose_name="Workerのアカウント", null=True, blank=True, unique=True)
 
     is_activate = models.BooleanField(default=False,
                                       verbose_name="入力が完了したか否か")
@@ -64,8 +64,11 @@ class WorkerBank(models.Model):
     """ユーザの銀行口座情報
     """
     worker = models.OneToOneField(
-        Worker, on_delete=models.CASCADE, related_name='banks',
+        Worker, on_delete=models.CASCADE, related_name='bank',
         verbose_name="対応ユーザ", null=False, blank=False)
+
+    is_activate = models.BooleanField(default=False,
+                                      verbose_name="入力が完了したか否か")
 
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="銀行名")

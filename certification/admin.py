@@ -1,5 +1,6 @@
 import secrets
 
+from django.db.models import Q
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
@@ -19,6 +20,36 @@ class MyUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email', )
+
+
+class WorkerFieldFilter(admin.BooleanFieldListFilter):
+    def queryset(self, request, queryset):
+
+        value = request.GET.get("worker__account__exact", None)
+
+        if value is None:
+            return super().queryset(request, queryset)
+
+        if value == "1":
+            # 1 = yes
+            return queryset.filter(~Q(worker=None))
+
+        return queryset.filter(worker=None)
+
+
+class CompanyFieldFilter(admin.BooleanFieldListFilter):
+    def queryset(self, request, queryset):
+
+        value = request.GET.get("company__account__exact", None)
+
+        if value is None:
+            return super().queryset(request, queryset)
+
+        if value == "1":
+            # 1 = yes
+            return queryset.filter(~Q(company=None))
+
+        return queryset.filter(company=None)
 
 
 class MyUserAdmin(UserAdmin):
@@ -41,7 +72,10 @@ class MyUserAdmin(UserAdmin):
     add_form = MyUserCreationForm
     list_display = ('email', 'worker_name', 'company_name',
                     'is_active', 'is_staff',  'defected_at')
-    list_filter = ('email', 'is_active', 'is_staff', 'is_superuser', 'groups')
+    list_filter = ('is_active',
+                   ("worker__account", WorkerFieldFilter),
+                   ("company__account", CompanyFieldFilter),
+                   'is_staff', 'is_superuser', 'groups')
     search_fields = ('is_superuser', 'is_active')
     ordering = ('email',)
 

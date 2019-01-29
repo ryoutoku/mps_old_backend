@@ -9,7 +9,7 @@ class Company(models.Model):
     """
 
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='company',
-                                   verbose_name="アカウント情報", null=True, blank=True, unique=True)
+                                   verbose_name="Companyのアカウント", null=True, blank=True, unique=True)
 
     is_activate = models.BooleanField(default=False,
                                       verbose_name="入力が完了したか否か")
