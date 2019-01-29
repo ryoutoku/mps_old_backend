@@ -65,7 +65,7 @@ class WorkerBank(models.Model):
     """
     worker = models.OneToOneField(
         Worker, on_delete=models.CASCADE, related_name='banks',
-        verbose_name="対応ユーザ")
+        verbose_name="対応ユーザ", null=False, blank=False)
 
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="銀行名")
