@@ -2,7 +2,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from .models import User
 
-from worker.models import Worker
+from worker.models import Worker, WorkerBank
 from company.models import Company
 
 
@@ -25,6 +25,8 @@ class WorkerModelForm(UserModelForm):
         user = super().save(commit=True)
         worker = Worker.objects.create(account=user)
         worker.save()
+        worker_bank = WorkerBank.objects.create(worker=worker)
+        worker_bank.save()
         return user
 
 
