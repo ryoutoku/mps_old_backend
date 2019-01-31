@@ -47,8 +47,8 @@ class Company(models.Model):
     contact_staff = models.CharField(max_length=50, null=True, blank=True,
                                      verbose_name="請求書宛先担当者")
 
-    contact_staff_mail_address = models.CharField(max_length=50, null=True, blank=True,
-                                                  verbose_name="請求書宛先メールアドレス")
+    contact_staff_mail_address = models.EmailField(null=True, blank=True,
+                                                   verbose_name="請求書宛先メールアドレス")
 
     pr_comment = models.TextField(null=True, blank=True,
                                   verbose_name="企業のPRコメント")
@@ -62,9 +62,6 @@ class Company(models.Model):
     joined_date = models.DateTimeField(default=timezone.now,
                                        verbose_name="入会年月日")
 
-    defected_date = models.DateField(null=True, blank=True,
-                                     verbose_name="退会年月日")
-
     def __str__(self):
         return f"{self.name}"
 
@@ -73,9 +70,8 @@ class Project(models.Model):
     """案件を表すクラス
     """
 
-    company = models.ForeignKey(
-        Company, on_delete=models.CASCADE, related_name='project',
-        verbose_name="企業")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='project',
+                                verbose_name="企業")
 
     name = models.CharField(max_length=16,
                             verbose_name="案件名")

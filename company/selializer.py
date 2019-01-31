@@ -12,12 +12,11 @@ class CompanySerializer(serializers.ModelSerializer):
             "name",
             "staff_name",
             "phone_number",
-            "mail_address",
             "address",
             "closest_station_1",
             "closest_station_2",
             "needs_paper_invoice",
-            "company_url",
+            "corporate_url",
             "start_office_hours",
             "end_office_hours",
             "contact_staff",
@@ -32,6 +31,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
+            "pk",
             "name",
             "min_fee",
             "max_fee",
