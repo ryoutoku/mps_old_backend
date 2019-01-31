@@ -1,5 +1,4 @@
-from django.shortcuts import get_object_or_404
-import django_filters
+# coding: utf-8
 from rest_framework import viewsets, filters, mixins
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, BasePermission
