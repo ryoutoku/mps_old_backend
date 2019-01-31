@@ -63,9 +63,8 @@ class Worker(models.Model):
 class WorkerBank(models.Model):
     """ユーザの銀行口座情報
     """
-    worker = models.OneToOneField(
-        Worker, on_delete=models.CASCADE, related_name='bank',
-        verbose_name="対応ユーザ", null=False, blank=False)
+    worker = models.OneToOneField(Worker, on_delete=models.CASCADE, related_name='bank',
+                                  verbose_name="対応ユーザ", null=False, blank=False)
 
     is_activate = models.BooleanField(default=False,
                                       verbose_name="入力が完了したか否か")
@@ -89,9 +88,8 @@ class WorkerBank(models.Model):
 class Resume(models.Model):
     """ユーザの経験情報を管理するクラス
     """
-    worker = models.ForeignKey(
-        Worker, on_delete=models.CASCADE, related_name='resumes',
-        verbose_name="対応ユーザ")
+    worker = models.ForeignKey(Worker, on_delete=models.CASCADE, related_name='resumes',
+                               verbose_name="対応ユーザ")
 
     project_name = models.CharField(max_length=50,
                                     verbose_name="プロジェクト名")
