@@ -8,11 +8,12 @@ from rest_framework import generics
 from .models import Worker, Resume, WorkerBank
 from .selializer import WorkerSerializer, ResumeSerializer, BankSerializer
 
+from django.conf import settings
+
 
 class IsWorker(BasePermission):
     def has_permission(self, request, view):
-        return True
-        # return (request.user is not None) & hasattr(request.user, "worker")
+        return (request.user is not None) & hasattr(request.user, "worker")
 
 
 class WorkerViewSet(viewsets.GenericViewSet,
