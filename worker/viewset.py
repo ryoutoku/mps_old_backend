@@ -95,10 +95,3 @@ class ResumeViewSet(viewsets.GenericViewSet,
         Resume.objects.create(**data).save()
 
         return Response(serializer.data)
-
-    """
-    def list(self, request):
-        serializer = self.get_serializer_class()(
-            self.queryset.filter(pk=request.user.worker.resume.id))
-        return Response(serializer.data)
-    """
