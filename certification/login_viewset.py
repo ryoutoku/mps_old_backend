@@ -1,14 +1,10 @@
-from rest_framework import viewsets, filters
-from rest_framework import mixins
-from rest_framework import status
+# coding: utf-8
+from django.contrib.auth import login, logout
+from rest_framework import viewsets, mixins, permissions, authentication
 from rest_framework.response import Response
 
 from .models import User
 from .selializer import LoginSerializer, LogoutSerializer
-
-from django.contrib.auth import login, logout
-
-from rest_framework import views, permissions, authentication
 
 
 class CsrfExemptSessionAuthentication(authentication.SessionAuthentication):
@@ -16,7 +12,8 @@ class CsrfExemptSessionAuthentication(authentication.SessionAuthentication):
         return
 
 
-class LoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class LoginViewSet(viewsets.GenericViewSet,
+                   mixins.CreateModelMixin):
     """ログインを提供するAPIのクラス
     """
     permission_classes = (permissions.AllowAny,)
@@ -25,20 +22,25 @@ class LoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = LoginSerializer
 
-    def create(self, request):
-        serializer = LoginSerializer(data=request.data)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
         return Response()
 
 
-class LogoutViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class LogoutViewSet(viewsets.GenericViewSet,
+                    mixins.CreateModelMixin):
     """ログアウトを提供するAPIのクラス
     """
+    permission_classes = (permissions.AllowAny,)
+
     queryset = User.objects.all()
     serializer_class = LogoutSerializer
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         logout(request)
         return Response()

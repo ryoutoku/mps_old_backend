@@ -4,6 +4,10 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 
+from rest_framework import views, permissions, authentication
+
+from rest_framework import generics
+
 from datetime import datetime
 from .models import User, SignUpToken
 from .forms import WorkerModelForm, CompanyModelForm
@@ -65,3 +69,8 @@ class SuccessView(TemplateView):
 
 class FailureView(TemplateView):
     template_name = "./signup/failure.html"
+
+
+class CsrfExemptSessionAuthentication(authentication.SessionAuthentication):
+    def enforce_csrf(self, request):
+        return
