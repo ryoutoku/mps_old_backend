@@ -1,5 +1,7 @@
 ### https://raw.github.com/github/gitignore/72190ee30bd1e2ccc233222341435adacb7a6500/Python.gitignore
 
+**/migrations/[0-9]*.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
