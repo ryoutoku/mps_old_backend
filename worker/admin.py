@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.contrib import admin
 from django.forms import ValidationError, ModelForm
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
@@ -57,7 +58,7 @@ class NameFilter(admin.SimpleListFilter):
 @admin.register(Worker)
 class WorkerAdmin(admin.ModelAdmin):
     form = WorkerAdminForm
-    _user_link_format = "<a href='../../certification/user/{}/change'>{}<\a>"
+    _link_format = "<a href='{}'>{}<\a>"
 
     list_display = ('full_name', 'account_name', 'is_activate', )
     list_filter = (NameFilter, 'is_activate',)
@@ -66,7 +67,12 @@ class WorkerAdmin(admin.ModelAdmin):
         return f"{obj.last_name} {obj.first_name}"
 
     def account_name(self, obj):
-        return format_html(self._user_link_format, obj.account.id, str(obj.account))
+        account = obj.account
+        url = reverse(
+            f'admin:{account._meta.app_label}_{account._meta.model_name}_change', args=(account.pk,)
+        )
+
+        return format_html(self._link_format, url, str(account))
 
     full_name.admin_order_field = 'last_name'
     full_name.short_description = '個人名'
@@ -98,16 +104,57 @@ class WorkerBankAdmin(admin.ModelAdmin):
     form = WorkerBankAdminForm
 
     list_display = ("id", "worker_name", "name", "is_activate", )
+    list_filter = ("is_activate",)
 
-    _worker_link_format = "<a href='../../worker/worker/{}/change'>{}<\a>"
+    _link_format = "<a href='{}'>{}<\a>"
 
     def worker_name(self, obj):
-        return format_html(self._worker_link_format, obj.worker.id, str(obj.worker))
+
+        worker = obj.worker
+        url = reverse(
+            f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
+        )
+        return format_html(self._link_format, url, str(worker))
 
     worker_name.admin_order_field = 'worker'
     worker_name.short_description = "個人名"
 
 
+class ResumeAdminForm(ModelForm):
+
+    class Meta:
+        model = Resume
+        fields = "__all__"
+
+    def clean_worker(self):
+        """accountが正しく設定できているかの追加確認
+        """
+
+        worker = self.cleaned_data["worker"]
+
+        if not worker:
+            raise ValidationError(_("you must set worker account"))
+
+        return worker
+
+
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    pass
+    form = ResumeAdminForm
+
+    list_display = ("id", "worker_name", "project_name",
+                    "started_at", "ended_at")
+    list_filter = ("started_at", "ended_at")
+
+    _link_format = "<a href='{}'>{}<\a>"
+
+    def worker_name(self, obj):
+
+        worker = obj.worker
+        url = reverse(
+            f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
+        )
+        return format_html(self._link_format, url, str(worker))
+
+    worker_name.admin_order_field = 'worker'
+    worker_name.short_description = "個人名"
