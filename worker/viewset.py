@@ -20,7 +20,7 @@ class WorkerViewSet(viewsets.GenericViewSet,
                     mixins.CreateModelMixin, mixins.ListModelMixin,):
 
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated, IsWorker)
+    permission_classes = (IsAuthenticated and IsWorker,)
 
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
@@ -47,7 +47,7 @@ class WorkerViewSet(viewsets.GenericViewSet,
 class BankViewSet(viewsets.GenericViewSet,
                   mixins.CreateModelMixin, mixins.ListModelMixin,):
     authentication_classes = (SessionAuthentication, )
-    permission_classes = (IsAuthenticated, IsWorker)
+    permission_classes = (IsAuthenticated and IsWorker,)
 
     queryset = WorkerBank.objects.all()
     serializer_class = BankSerializer
@@ -75,7 +75,7 @@ class ResumeViewSet(viewsets.GenericViewSet,
                     mixins.CreateModelMixin, mixins.ListModelMixin,
                     mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (SessionAuthentication, )
-    permission_classes = (IsAuthenticated, IsWorker)
+    permission_classes = (IsAuthenticated and IsWorker,)
 
     queryset = Resume.objects.order_by('started_at')
     serializer_class = ResumeSerializer

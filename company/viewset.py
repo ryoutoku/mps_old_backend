@@ -17,7 +17,7 @@ class IsCompany(BasePermission):
 class CompanyViewSet(viewsets.GenericViewSet,
                      mixins.CreateModelMixin, mixins.ListModelMixin,):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated, IsCompany)
+    permission_classes = (IsAuthenticated and IsCompany, )
 
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
@@ -45,7 +45,7 @@ class ProjectViewSet(viewsets.GenericViewSet,
                      mixins.CreateModelMixin, mixins.ListModelMixin,
                      mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated, IsCompany)
+    permission_classes = (IsAuthenticated and IsCompany, )
 
     queryset = Project.objects.order_by("start_term")
     serializer_class = ProjectSerializer
