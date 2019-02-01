@@ -36,6 +36,7 @@ class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resume
         fields = (
+            "pk",
             "project_name",
             "started_at",
             "ended_at",

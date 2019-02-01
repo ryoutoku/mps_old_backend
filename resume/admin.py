@@ -1,7 +1,15 @@
 from django.contrib import admin
-from .models import Resume
+from .models import Question, Answer
 
 
-@admin.register(Resume)
-class ResumeAdmin(admin.ModelAdmin):
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    _user_link_format = "<a href='../../certification/user/{}/change'>{}<\a>"
+
+    list_display = ("resume", "company", "detail", "create_at")
+    list_filter = ('create_at',)
+
+
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
     pass

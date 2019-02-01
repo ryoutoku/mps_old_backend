@@ -2,6 +2,11 @@ from django.views.generic import TemplateView, CreateView
 from django.utils.timezone import utc
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+
+from rest_framework import views, permissions, authentication
+
+from rest_framework import generics
 
 from datetime import datetime
 from .models import User, SignUpToken
@@ -35,6 +40,12 @@ class SignUpBaseCreateView(CreateView):
 
         return super().get(request, **kwargs)
 
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.password = make_password(user.password)
+        user.save()
+        return HttpResponseRedirect(self.success_url)
+
 
 class WorkerCreateView(SignUpBaseCreateView):
     worker = 1
@@ -58,3 +69,8 @@ class SuccessView(TemplateView):
 
 class FailureView(TemplateView):
     template_name = "./signup/failure.html"
+
+
+class CsrfExemptSessionAuthentication(authentication.SessionAuthentication):
+    def enforce_csrf(self, request):
+        return

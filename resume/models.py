@@ -1,21 +1,37 @@
+# coding: utf-8
 from django.db import models
+from django.utils import timezone
 
-from worker.models import Worker
+from worker.models import Resume
 from company.models import Company
 
 
-class Resume(models.Model):
-    """ユーザと企業とのレジュメボードでのやり取りの内容を管理するクラス
+class Question(models.Model):
+    """レジュメに対する企業の質問を管理するクラス
     """
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="question",
+                               verbose_name="質問したレジュメ")
 
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="question",
                                 verbose_name="質問した企業名")
-    worker = models.ForeignKey(Worker, on_delete=models.CASCADE, related_name="question",
-                               verbose_name="質問されたユーザ")
-    detail = models.TextField(
-        verbose_name="質問内容",)
-    is_answered = models.BooleanField(default=False,
-                                      verbose_name="回答したか否か")
+
+    detail = models.TextField(verbose_name="質問内容",)
+
+    create_at = models.DateTimeField(default=timezone.now, verbose_name="質問時間")
 
     def __str__(self):
-        return f"{self.worker},{self.company}"
+        return f"{self.resume}"
+
+
+class Answer(models.Model):
+    """ユーザと企業とのレジュメボードでのやり取りの内容を管理するクラス
+    """
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="question",
+                                 verbose_name="質問内容")
+
+    details = models.TextField(verbose_name="回答内容",)
+
+    create_at = models.DateTimeField(default=timezone.now, verbose_name="回答時間")
+
+    def __str__(self):
+        return f"{self.question}"

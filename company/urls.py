@@ -5,5 +5,5 @@ from .viewset import CompanyViewSet, ProjectViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'companies', CompanyViewSet)
-router.register(r'projects', ProjectViewSet)
+router.register('info', CompanyViewSet)
+router.register('projects', ProjectViewSet)

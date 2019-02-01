@@ -22,31 +22,38 @@ class MyUserCreationForm(UserCreationForm):
         fields = ('email', )
 
 
-class WorkerFieldFilter(admin.BooleanFieldListFilter):
-    def queryset(self, request, queryset):
+class WorkerFieldFilter(admin.SimpleListFilter):
+    title = _("worker")
+    parameter_name = 'worker'
 
-        value = request.GET.get("worker__account__exact", None)
+    def lookups(self, request, model_admin):
+        return ((True, _("Yes")), (False, _("No")))
+
+    def queryset(self, request, queryset):
+        value = self.value()
 
         if value is None:
-            return super().queryset(request, queryset)
+            return queryset
 
-        if value == "1":
-            # 1 = yes
+        if value == "True":
             return queryset.filter(~Q(worker=None))
 
         return queryset.filter(worker=None)
 
 
-class CompanyFieldFilter(admin.BooleanFieldListFilter):
+class CompanyFieldFilter(admin.SimpleListFilter):
+    title = _("company")
+    parameter_name = 'company'
+
+    def lookups(self, request, model_admin):
+        return ((True, _("Yes")), (False, _("No")))
+
     def queryset(self, request, queryset):
-
-        value = request.GET.get("company__account__exact", None)
-
+        value = self.value()
         if value is None:
-            return super().queryset(request, queryset)
+            return queryset
 
-        if value == "1":
-            # 1 = yes
+        if value == "True":
             return queryset.filter(~Q(company=None))
 
         return queryset.filter(company=None)
@@ -73,8 +80,7 @@ class MyUserAdmin(UserAdmin):
     list_display = ('email', 'worker_name', 'company_name',
                     'is_active', 'is_staff',  'defected_at')
     list_filter = ('is_active',
-                   ("worker__account", WorkerFieldFilter),
-                   ("company__account", CompanyFieldFilter),
+                   WorkerFieldFilter, CompanyFieldFilter,
                    'is_staff', 'is_superuser', 'groups')
     search_fields = ('is_superuser', 'is_active')
     ordering = ('email',)

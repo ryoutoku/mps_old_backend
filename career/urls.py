@@ -20,17 +20,16 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 
+from certification.login_urls import router as login_router
 from company.urls import router as company_router
 from worker.urls import router as worker_router
-from certification.urls import router as login_router
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include(company_router.urls)),
     path('worker/', include(worker_router.urls)),
     path('login/', include(login_router.urls)),
-    path('signup/', include('certification.urls')),
+    path('signup/', include('certification.signup_urls')),
 ] +  \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
     static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
