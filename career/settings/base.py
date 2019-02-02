@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_ses',
     'rest_framework',
+    'utility',
     'certification',
     'company',
     'worker',
