@@ -1,9 +1,15 @@
 # coding: utf-8
 
-from rest_framework import routers
+from rest_framework.routers import DefaultRouter
 from .viewset import CompanyViewSet, ProjectViewSet
 
+from utility.router import SameURLRouter
 
-router = routers.DefaultRouter()
+router = SameURLRouter()
 router.register('info', CompanyViewSet)
-router.register('projects', ProjectViewSet)
+
+default_router = DefaultRouter()
+default_router.register('projects', ProjectViewSet)
+
+
+urlpatterns = router.urls + default_router.urls

@@ -15,7 +15,7 @@ class IsCompany(BasePermission):
 
 
 class CompanyViewSet(viewsets.GenericViewSet,
-                     mixins.CreateModelMixin, mixins.ListModelMixin,):
+                     mixins.ListModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated and IsCompany, )
 
@@ -24,20 +24,19 @@ class CompanyViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(pk=self.request.user.company.id)
-        self.kwargs["pk"] = self.request.user.company.id
+        queryset = queryset.filter(pk=self.request.user.company.id).all()
         return queryset
 
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.queryset.filter(pk=request.user.company.id).update(
-            **serializer.data)
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().first()
+        serializer = self.get_serializer(queryset, many=False)
         return Response(serializer.data)
 
-    def list(self, request):
-        data = self.get_object()
-        serializer = self.get_serializer_class()(data)
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        queryset = self.get_queryset()
+        queryset.update(**serializer.data)
         return Response(serializer.data)
 
 
@@ -52,15 +51,12 @@ class ProjectViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(company=self.request.user.company)
+        queryset = queryset.filter(company=self.request.user.company).all()
         return queryset
 
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        data = dict(serializer.data)
-        data["company"] = request.user.company
-        Project.objects.create(**data).save()
-
-        return Response(serializer.data)
+    def perform_create(self, serializer):
+        data = serializer.data
+        data["company"] = self.request.user.company
+        obj = Project.objects.create(**data)
+        obj.clean()
+        obj.save()
