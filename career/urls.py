@@ -24,10 +24,13 @@ from certification.login_urls import router as login_router
 from company.urls import router as company_router
 from worker.urls import router as worker_router
 
+from worker.urls import default_router as default_router
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include(company_router.urls)),
-    path('worker/', include(worker_router.urls)),
+    path('worker/', include("worker.urls")),
     path('login/', include(login_router.urls)),
     path('signup/', include('certification.signup_urls')),
 ] +  \

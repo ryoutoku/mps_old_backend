@@ -1,4 +1,5 @@
 # coding: utf-8
+from rest_framework.views import APIView
 from rest_framework import viewsets, filters, mixins
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, BasePermission
@@ -17,7 +18,7 @@ class IsWorker(BasePermission):
 
 
 class WorkerViewSet(viewsets.GenericViewSet,
-                    mixins.CreateModelMixin, mixins.ListModelMixin,):
+                    mixins.ListModelMixin, mixins.UpdateModelMixin):
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated and IsWorker,)
@@ -27,25 +28,24 @@ class WorkerViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(pk=self.request.user.worker.id)
-        self.kwargs["pk"] = self.request.user.worker.id
+        queryset = queryset.filter(pk=self.request.user.worker.id).first()
         return queryset
 
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.queryset.filter(pk=request.user.worker.id).update(
-            **serializer.data)
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=False)
         return Response(serializer.data)
 
-    def list(self, request):
-        data = self.get_object()
-        serializer = self.get_serializer_class()(data)
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        queryset = self.get_queryset()
+        queryset.update(**serializer.data)
         return Response(serializer.data)
 
 
 class BankViewSet(viewsets.GenericViewSet,
-                  mixins.CreateModelMixin, mixins.ListModelMixin,):
+                  mixins.UpdateModelMixin, mixins.ListModelMixin,):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (IsAuthenticated and IsWorker,)
 
@@ -54,20 +54,19 @@ class BankViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(worker=self.request.user.worker)
-        self.kwargs["pk"] = self.request.user.worker.bank.id
+        queryset = queryset.filter(worker=self.request.user.worker).first()
         return queryset
 
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.queryset.filter(pk=request.user.worker.bank.id).update(
-            **serializer.data)
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=False)
         return Response(serializer.data)
 
-    def list(self, request):
-        data = self.get_object()
-        serializer = self.get_serializer_class()(data)
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        queryset = self.get_queryset()
+        queryset.update(**serializer.data)
         return Response(serializer.data)
 
 
@@ -82,15 +81,5 @@ class ResumeViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(worker=self.request.user.worker)
+        queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
-
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        data = dict(serializer.data)
-        data["worker"] = request.user.worker
-        Resume.objects.create(**data).save()
-
-        return Response(serializer.data)
