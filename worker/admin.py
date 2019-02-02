@@ -60,7 +60,7 @@ class WorkerAdmin(admin.ModelAdmin):
     form = WorkerAdminForm
     _link_format = "<a href='{}'>{}<\a>"
 
-    list_display = ('full_name', 'account_name', 'is_activate', )
+    list_display = ("id", 'full_name', 'account_name', 'is_activate', )
     list_filter = (NameFilter, 'is_activate',)
 
     def full_name(self, obj):
