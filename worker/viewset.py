@@ -9,8 +9,6 @@ from rest_framework import generics
 from .models import Worker, Resume, WorkerBank
 from .selializer import WorkerSerializer, ResumeSerializer, BankSerializer
 
-from django.conf import settings
-
 
 class IsWorker(BasePermission):
     def has_permission(self, request, view):
@@ -28,12 +26,12 @@ class WorkerViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(pk=self.request.user.worker.id).first()
+        queryset = queryset.filter(pk=self.request.user.worker.id).all()
         return queryset
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=False)
+        data = self.get_queryset().first()
+        serializer = self.get_serializer(data)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
@@ -54,12 +52,12 @@ class BankViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(worker=self.request.user.worker).first()
+        queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=False)
+        data = self.get_queryset().first()
+        serializer = self.get_serializer(data)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
@@ -83,3 +81,10 @@ class ResumeViewSet(viewsets.GenericViewSet,
         queryset = super().get_queryset()
         queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
+
+    def perform_create(self, serializer):
+        data = serializer.data
+        data["worker"] = self.request.user.worker
+        obj = Resume.objects.create(**data)
+        obj.clean()
+        obj.save()
