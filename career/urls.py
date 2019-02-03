@@ -24,10 +24,11 @@ from certification.login_urls import router as login_router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('signup/', include('certification.signup_urls')),
+    path('login/', include(login_router.urls)),
     path('company/', include("company.urls")),
     path('worker/', include("worker.urls")),
-    path('login/', include(login_router.urls)),
-    path('signup/', include('certification.signup_urls')),
+    path('resumes/', include("resume.urls"))
 ] +  \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
     static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
