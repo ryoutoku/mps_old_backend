@@ -1,17 +1,14 @@
 # coding: utf-8
 from rest_framework import viewsets, filters, mixins
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
 
 from .models import Company, Project
 from .selializer import CompanySerializer, ProjectSerializer
 
-
-class IsCompany(BasePermission):
-    def has_permission(self, request, view):
-        return (request.user is not None) & hasattr(request.user, "company")
+from utility.permission import IsCompany
 
 
 class CompanyViewSet(viewsets.GenericViewSet,

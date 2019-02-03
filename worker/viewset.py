@@ -2,17 +2,14 @@
 from rest_framework.views import APIView
 from rest_framework import viewsets, filters, mixins
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
 
 from .models import Worker, Resume, WorkerBank
 from .selializer import WorkerSerializer, ResumeSerializer, BankSerializer
 
-
-class IsWorker(BasePermission):
-    def has_permission(self, request, view):
-        return (request.user is not None) & hasattr(request.user, "worker")
+from utility.permission import IsWorker
 
 
 class WorkerViewSet(viewsets.GenericViewSet,
