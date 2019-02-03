@@ -9,7 +9,6 @@ class WorkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worker
         fields = (
-            "id",
             "last_name",
             "first_name",
             "working_status",
