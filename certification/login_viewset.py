@@ -27,7 +27,12 @@ class LoginViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return Response()
+
+        account = "worker"
+        if hasattr(request.user, "company"):
+            account = "company"
+
+        return Response({"account": account})
 
 
 class LogoutViewSet(viewsets.GenericViewSet,
