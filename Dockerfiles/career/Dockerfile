@@ -5,4 +5,4 @@ WORKDIR /code
 ADD requirements.txt /code/
 #RUN apt-get update -y && \
 #    apt-get install -y openssl
-RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.orG -r requirements.txt
+RUN pip install --upgrade pip && pip install --trusted-host pypi.org --trusted-host files.pythonhosted.orG -r requirements.txt
