@@ -1,33 +1,52 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 from certification.models import User
 
 WORKING_STATUS_CHOICES = (
-    (0, 'now'),
-    (1, 'after 1week'),
-    (2, 'after 2week'),
-    (3, 'after 1month'),
-    (4, 'after 3month'),
+    (0, '---未登録---'),
+    (1, '1月から'),
+    (2, '2月から'),
+    (3, '3月から'),
+    (4, '4月から'),
+    (5, '5月から'),
+    (6, '6月から'),
+    (7, '7月から'),
+    (8, '8月から'),
+    (9, '9月から'),
+    (10, '10月から'),
+    (11, '11月から'),
+    (12, '12月から'),
 )
 
 WORK_STYLE_CHOICES = (
-    (0, '1day'),
-    (1, '2days'),
-    (2, '3days'),
-    (3, '4days'),
-    (4, '5days'),
+    (0, '---未登録---'),
+    (1, '週1日'),
+    (2, '週2日'),
+    (3, '週3日'),
+    (4, '週4日'),
+    (5, '週5日'),
 )
+
+ACCOUNT_TYPE_CHOICES = {
+    (0, '---未登録---'),
+    (1, '普通預金'),
+    (2, '当座預金')
+}
 
 
 class Worker(models.Model):
     """ユーザの一般情報を管理するクラス
     """
+    phone_number_regex = RegexValidator(regex=r'^[0-9]+$', message=(
+        "Tel Number must be entered in the format: '09012345678'. Up to 15 digits allowed."))
+
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker',
                                    verbose_name="Workerのアカウント", null=True, blank=True, unique=True)
 
     is_activate = models.BooleanField(default=False,
-                                      verbose_name="入力が完了したか否か")
+                                      verbose_name="公開するか否か")
 
     last_name = models.CharField(max_length=16, null=True, blank=True,
                                  verbose_name="氏")
@@ -35,17 +54,20 @@ class Worker(models.Model):
     first_name = models.CharField(max_length=16, null=True, blank=True,
                                   verbose_name="名")
 
-    working_status = models.CharField(max_length=16, null=True, blank=True,
-                                      verbose_name="稼働中か否か")
+    address = models.CharField(max_length=50, null=True, blank=True,
+                               verbose_name="住所")
 
-    work_style = models.IntegerField(choices=WORK_STYLE_CHOICES, null=True, blank=True,
+    phone_number = models.CharField(validators=[phone_number_regex], max_length=15, null=True, blank=True,
+                                    verbose_name='電話番号')
+
+    work_style = models.IntegerField(choices=WORK_STYLE_CHOICES, null=True, blank=True, default=0,
                                      verbose_name="稼働可能日数(ex. 週xx日〜)")
 
     hope_fee = models.IntegerField(null=True, blank=True,
                                    verbose_name="希望する単金")
 
-    open_status = models.IntegerField(choices=WORKING_STATUS_CHOICES, null=True, blank=True,
-                                      verbose_name="働けるか否か")
+    working_status = models.IntegerField(choices=WORKING_STATUS_CHOICES, null=True, blank=True, default=0,
+                                         verbose_name="稼働開始可能月")
 
     interested_work = models.TextField(null=True, blank=True,
                                        verbose_name="興味のある業種")
@@ -55,6 +77,9 @@ class Worker(models.Model):
 
     github_url = models.URLField(null=True, blank=True,
                                  verbose_name="GithubのURL")
+
+    experience = models.IntegerField(null=True, blank=True, default=0,
+                                     verbose_name="経験年数(単位:月)")
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
@@ -75,8 +100,8 @@ class WorkerBank(models.Model):
     office_code = models.CharField(max_length=50, null=True, blank=True,
                                    verbose_name="銀行支店コード")
 
-    account_type = models.CharField(max_length=50, null=True, blank=True,
-                                    verbose_name="口座種類")
+    account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=True, blank=True, default=0,
+                                       verbose_name="口座種類")
 
     account_number = models.CharField(max_length=16, null=True, blank=True,
                                       verbose_name="口座番号")

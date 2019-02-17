@@ -11,13 +11,15 @@ class WorkerSerializer(serializers.ModelSerializer):
         fields = (
             "last_name",
             "first_name",
+            "address",
             "working_status",
             "work_style",
             "hope_fee",
-            "open_status",
             "interested_work",
             "qiita_url",
-            "github_url"
+            "github_url",
+            "phone_number",
+            "experience"
         )
 
 
