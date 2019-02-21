@@ -35,6 +35,12 @@ ACCOUNT_TYPE_CHOICES = {
     (2, '当座預金')
 }
 
+SEX_TYPE_CHOICES = {
+    (0, '---未登録---'),
+    (1, '男性'),
+    (2, '女性')
+}
+
 
 class Worker(models.Model):
     """ユーザの一般情報を管理するクラス
@@ -43,13 +49,16 @@ class Worker(models.Model):
         "Tel Number must be entered in the format: '09012345678'. Up to 15 digits allowed."))
 
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker',
-                                   verbose_name="Workerのアカウント", null=True, blank=True, unique=True)
+                                   verbose_name="Workerのアカウント", unique=True)
 
     is_activate = models.BooleanField(default=False,
-                                      verbose_name="公開するか否か")
+                                      verbose_name="必須入力が完了したか否か")
+
+    is_open = models.BooleanField(default=False,
+                                  verbose_name="公開するか否か")
 
     last_name = models.CharField(max_length=16, null=True, blank=True,
-                                 verbose_name="氏")
+                                 verbose_name="姓")
 
     first_name = models.CharField(max_length=16, null=True, blank=True,
                                   verbose_name="名")
@@ -80,6 +89,12 @@ class Worker(models.Model):
 
     experience = models.IntegerField(null=True, blank=True, default=0,
                                      verbose_name="経験年数(単位:月)")
+
+    birth_day = models.DateField(null=True, blank=True,
+                                 verbose_name="生年月日")
+
+    sex = models.IntegerField(choices=SEX_TYPE_CHOICES, null=True, blank=True, default=0,
+                              verbose_name="性別")
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"

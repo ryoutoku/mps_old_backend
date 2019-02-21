@@ -19,7 +19,11 @@ class WorkerSerializer(serializers.ModelSerializer):
             "qiita_url",
             "github_url",
             "phone_number",
-            "experience"
+            "experience",
+            "is_open",
+            "is_activate",
+            "sex",
+            "birth_day"
         )
 
 
