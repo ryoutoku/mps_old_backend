@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'worker',
     'resume',
     'negotiation',
+    'term'
 ]
 
 MIDDLEWARE = [
