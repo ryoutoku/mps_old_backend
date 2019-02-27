@@ -11,6 +11,8 @@ class WorkerSerializer(serializers.ModelSerializer):
         fields = (
             "last_name",
             "first_name",
+            "last_name_kana",
+            "first_name_kana",
             "address",
             "working_status",
             "work_style",
@@ -18,6 +20,7 @@ class WorkerSerializer(serializers.ModelSerializer):
             "interested_work",
             "qiita_url",
             "github_url",
+            "other_url",
             "phone_number",
             "experience",
             "is_open",

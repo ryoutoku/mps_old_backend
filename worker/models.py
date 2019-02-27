@@ -57,11 +57,17 @@ class Worker(models.Model):
     is_open = models.BooleanField(default=False,
                                   verbose_name="公開するか否か")
 
-    last_name = models.CharField(max_length=16, null=True, blank=True,
+    last_name = models.CharField(max_length=10, null=True, blank=True,
                                  verbose_name="姓")
 
-    first_name = models.CharField(max_length=16, null=True, blank=True,
+    last_name_kana = models.CharField(max_length=10, null=True, blank=True,
+                                      verbose_name="セイ")
+
+    first_name = models.CharField(max_length=10, null=True, blank=True,
                                   verbose_name="名")
+
+    first_name_kana = models.CharField(max_length=10, null=True, blank=True,
+                                       verbose_name="メイ")
 
     address = models.CharField(max_length=50, null=True, blank=True,
                                verbose_name="住所")
@@ -86,6 +92,9 @@ class Worker(models.Model):
 
     github_url = models.URLField(null=True, blank=True,
                                  verbose_name="GithubのURL")
+
+    other_url = models.URLField(null=True, blank=True,
+                                verbose_name="その他のURL")
 
     experience = models.IntegerField(null=True, blank=True, default=0,
                                      verbose_name="経験年数(単位:月)")
@@ -112,7 +121,7 @@ class WorkerBank(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="銀行名")
 
-    office_code = models.CharField(max_length=50, null=True, blank=True,
+    office_code = models.CharField(max_length=5, null=True, blank=True,
                                    verbose_name="銀行支店コード")
 
     account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=True, blank=True, default=0,
@@ -139,13 +148,13 @@ class Resume(models.Model):
     ended_at = models.DateField(null=True, blank=True,
                                 verbose_name="終了年月")
 
-    position = models.CharField(max_length=16,
+    position = models.CharField(max_length=20,
                                 verbose_name="プロジェクトでのポジション")
 
-    scale = models.CharField(max_length=16,
+    scale = models.CharField(max_length=20,
                              verbose_name="開発規模")
 
-    tools = models.CharField(max_length=16,
+    tools = models.CharField(max_length=20,
                              verbose_name="開発ツール、フレームワークなど")
 
     details = models.TextField(
