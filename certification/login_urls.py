@@ -1,8 +1,9 @@
 # coding: utf-8
 
 from rest_framework import routers
-from .login_viewset import LoginViewSet, LogoutViewSet
+from .login_viewset import LoginViewSet, LogoutViewSet, SingUpViewSet
 
 router = routers.DefaultRouter()
 router.register(r"login", LoginViewSet)
 router.register(r"logout", LogoutViewSet)
+router.register(r"singup", SingUpViewSet)
