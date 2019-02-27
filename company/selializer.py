@@ -10,7 +10,9 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = (
             "name",
-            "staff_name",
+            "staff_last_name",
+            "staff_first_name",
+            "staff_department",
             "phone_number",
             "address",
             "closest_station_1",
@@ -19,7 +21,9 @@ class CompanySerializer(serializers.ModelSerializer):
             "corporate_url",
             "start_office_hours",
             "end_office_hours",
-            "contact_staff",
+            "contact_staff_last_name",
+            "contact_staff_first_name",
+            "contact_staff_department",
             "contact_staff_mail_address",
             "pr_comment",
             "pr_photo_1",

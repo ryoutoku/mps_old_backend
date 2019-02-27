@@ -17,19 +17,25 @@ class Company(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="企業名")
 
-    staff_name = models.CharField(max_length=50, null=True, blank=True,
-                                  verbose_name="担当者名")
+    staff_last_name = models.CharField(max_length=10, null=True, blank=True,
+                                       verbose_name="担当者:姓")
 
-    phone_number = models.CharField(max_length=50, null=True, blank=True,
+    staff_first_name = models.CharField(max_length=10, null=True, blank=True,
+                                        verbose_name="担当者:名")
+
+    staff_department = models.CharField(max_length=20, null=True, blank=True,
+                                        verbose_name="担当者所属部署")
+
+    phone_number = models.CharField(max_length=20, null=True, blank=True,
                                     verbose_name="電話番号")
 
     address = models.CharField(max_length=50, null=True, blank=True,
                                verbose_name="企業住所")
 
-    closest_station_1 = models.CharField(max_length=50, null=True, blank=True,
+    closest_station_1 = models.CharField(max_length=20, null=True, blank=True,
                                          verbose_name="最寄り駅1")
 
-    closest_station_2 = models.CharField(max_length=50, null=True, blank=True,
+    closest_station_2 = models.CharField(max_length=20, null=True, blank=True,
                                          verbose_name="最寄り駅2")
 
     needs_paper_invoice = models.BooleanField(default=False, null=True, blank=True,
@@ -44,8 +50,14 @@ class Company(models.Model):
     end_office_hours = models.TimeField(null=True, blank=True,
                                         verbose_name="就業の終了時間")
 
-    contact_staff = models.CharField(max_length=50, null=True, blank=True,
-                                     verbose_name="請求書宛先担当者")
+    contact_staff_last_name = models.CharField(max_length=10, null=True, blank=True,
+                                               verbose_name="請求書宛先担当者:姓")
+
+    contact_staff_first_name = models.CharField(max_length=10, null=True, blank=True,
+                                                verbose_name="請求書宛先担当者:名")
+
+    contact_staff_department = models.CharField(max_length=20, null=True, blank=True,
+                                                verbose_name="請求書宛先担当者:所属")
 
     contact_staff_mail_address = models.EmailField(null=True, blank=True,
                                                    verbose_name="請求書宛先メールアドレス")
@@ -59,9 +71,6 @@ class Company(models.Model):
     pr_photo_2 = models.ImageField(upload_to='uploads/company/image', null=True, blank=True,
                                    verbose_name="企業のPR写真2")
 
-    joined_date = models.DateTimeField(default=timezone.now,
-                                       verbose_name="入会年月日")
-
     def __str__(self):
         return f"{self.name}"
 
@@ -73,7 +82,7 @@ class Project(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='project',
                                 verbose_name="企業")
 
-    name = models.CharField(max_length=16,
+    name = models.CharField(max_length=20,
                             verbose_name="案件名")
 
     min_fee = models.IntegerField(null=True, blank=True,
@@ -82,10 +91,10 @@ class Project(models.Model):
     max_fee = models.IntegerField(null=True, blank=True,
                                   verbose_name="最大単金")
 
-    workplace = models.CharField(max_length=16, null=True, blank=True,
+    workplace = models.CharField(max_length=20, null=True, blank=True,
                                  verbose_name="作業場所(住所/ビル名など)")
 
-    closest_station = models.CharField(max_length=50, null=True, blank=True,
+    closest_station = models.CharField(max_length=20, null=True, blank=True,
                                        verbose_name="最寄り駅")
 
     start_term = models.DateField(null=True, blank=True,
@@ -103,13 +112,13 @@ class Project(models.Model):
     rest_time = models.TimeField(null=True, blank=True,
                                  verbose_name="就業中の休憩時間")
 
-    garments = models.CharField(max_length=16, null=True, blank=True,
+    garments = models.CharField(max_length=20, null=True, blank=True,
                                 verbose_name="服装")
 
-    restroom = models.CharField(max_length=16, null=True, blank=True,
+    restroom = models.CharField(max_length=20, null=True, blank=True,
                                 verbose_name="トイレ")
 
-    conditions = models.CharField(max_length=16, null=True, blank=True,
+    conditions = models.CharField(max_length=20, null=True, blank=True,
                                   verbose_name="条件備考")
 
     content = models.TextField(null=True, blank=True,
