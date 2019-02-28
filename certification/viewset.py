@@ -1,5 +1,7 @@
 # coding: utf-8
 from django.contrib.auth import login, logout
+from django.contrib.auth.hashers import make_password
+
 from rest_framework import viewsets, mixins, permissions, authentication
 from rest_framework.response import Response
 from rest_framework import status
@@ -77,7 +79,8 @@ class SingUpViewSet(viewsets.GenericViewSet,
 
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
-        user = User.objects.create(email=email, password=password)
+        user = User.objects.create(
+            email=email, password=make_password(password))
 
         if account == "worker":
             self._create_worker(user)

@@ -20,12 +20,9 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 
-from certification.login_urls import router as login_router
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('signup/', include('certification.signup_urls')),
-    path('login/', include(login_router.urls)),
+    path('login/', include("certification.urls")),
     path('company/', include("company.urls")),
     path('worker/', include("worker.urls")),
     path('resumes/', include("resume.urls"))
