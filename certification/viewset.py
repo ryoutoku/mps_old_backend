@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import User, SignUpToken, TOKEN_ATTRIBUTE
-from worker.models import Worker, WorkerBank
+from worker.models import WorkerBasicInfo, WorkerCondition
 from company.models import Company
 from .selializer import LoginSerializer, LogoutSerializer, SingUpSerializer
 
@@ -37,7 +37,7 @@ class LoginViewSet(viewsets.GenericViewSet,
         if hasattr(request.user, "company"):
             account = "company"
 
-        return Response({"account": account}, status=status.HTTP_200_OK)
+        return Response({"account": account})
 
 
 class LogoutViewSet(viewsets.GenericViewSet,
@@ -53,7 +53,7 @@ class LogoutViewSet(viewsets.GenericViewSet,
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+        return Response()
 
 
 class SingUpViewSet(viewsets.GenericViewSet,
@@ -90,9 +90,9 @@ class SingUpViewSet(viewsets.GenericViewSet,
         return Response({"account": account}, status=status.HTTP_201_CREATED)
 
     def _create_worker(self, user):
-        worker = Worker.objects.create(account=user)
+        worker = WorkerBasicInfo.objects.create(account=user)
         worker.save()
-        worker_bank = WorkerBank.objects.create(worker=worker)
+        worker_bank = WorkerCondition.objects.create(account=user)
         worker_bank.save()
 
     def _create_company(self, user):

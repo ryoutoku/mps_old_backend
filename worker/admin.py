@@ -5,14 +5,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
-from .models import Worker, WorkerBank, Resume
+from .models import WorkerBasicInfo, WorkerCondition, Resume
 from certification.models import User
 
 
-class WorkerAdminForm(ModelForm):
+class WorkerBasicInfoAdminForm(ModelForm):
 
     class Meta:
-        model = Worker
+        model = WorkerBasicInfo
         fields = "__all__"
 
     def clean_account(self):
@@ -55,9 +55,9 @@ class NameFilter(admin.SimpleListFilter):
         return queryset.filter(Q(last_name=None) | Q(first_name=None))
 
 
-@admin.register(Worker)
-class WorkerAdmin(admin.ModelAdmin):
-    form = WorkerAdminForm
+@admin.register(WorkerBasicInfo)
+class WorkerBasicInfoAdmin(admin.ModelAdmin):
+    form = WorkerBasicInfoAdminForm
     _link_format = "<a href='{}'>{}<\a>"
 
     list_display = ("id", 'full_name', 'account_name', 'is_activate', )
@@ -81,36 +81,44 @@ class WorkerAdmin(admin.ModelAdmin):
     account_name.short_description = "登録email"
 
 
-class WorkerBankAdminForm(ModelForm):
+class WorkerConditionAdminForm(ModelForm):
 
     class Meta:
-        model = WorkerBank
+        model = WorkerCondition
         fields = "__all__"
 
     def clean_worker(self):
         """accountが正しく設定できているかの追加確認
         """
+        account = self.cleaned_data["account"]
+        user = User.objects.filter(email=account).first()
 
-        worker = self.cleaned_data["worker"]
+        if not user:
+            raise ValidationError(_("you must set active account"))
 
-        if not worker:
+        if not user.is_active:
+            raise ValidationError(_("you must set active account"))
+
+        if user.is_staff or user.is_superuser:
+            raise ValidationError(_("you must set general account"))
+
+        if hasattr(user, 'company'):
             raise ValidationError(_("you must set worker account"))
 
-        return worker
+        return account
 
 
-@admin.register(WorkerBank)
-class WorkerBankAdmin(admin.ModelAdmin):
-    form = WorkerBankAdminForm
+@admin.register(WorkerCondition)
+class WorkerConditionAdmin(admin.ModelAdmin):
+    form = WorkerConditionAdminForm
 
-    list_display = ("id", "worker_name", "name", "is_activate", )
-    list_filter = ("is_activate",)
+    list_display = ("id", "worker_name", )
 
     _link_format = "<a href='{}'>{}<\a>"
 
     def worker_name(self, obj):
 
-        worker = obj.worker
+        worker = obj.account.worker
         url = reverse(
             f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
         )

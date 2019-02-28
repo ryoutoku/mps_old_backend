@@ -1,12 +1,12 @@
 # coding: utf-8
 from rest_framework.routers import DefaultRouter
-from .viewset import WorkerViewSet, ResumeViewSet, BankViewSet
+from .viewset import WorkerBasicInfoViewSet, WorkerConditionViewSet, ResumeViewSet
 
 from utility.router import SameURLRouter
 
 router = SameURLRouter()
-router.register("info", WorkerViewSet)
-router.register("bank", BankViewSet)
+router.register("info", WorkerBasicInfoViewSet)
+router.register("condition", WorkerConditionViewSet)
 
 default_router = DefaultRouter()
 default_router.register("resumes", ResumeViewSet)

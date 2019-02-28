@@ -12,7 +12,7 @@ class QuestionAdmin(admin.ModelAdmin):
     _link_format = "<a href='{}'>{}<\a>"
 
     list_display = ("id", "worker_id", "resume_id",
-                    "company", "detail", "create_at")
+                    "account", "detail", "create_at")
     list_filter = ('create_at',)
 
     def resume_id(self, obj):
@@ -24,12 +24,12 @@ class QuestionAdmin(admin.ModelAdmin):
         return format_html(self._link_format, url, str(resume.id))
 
     def worker_id(self, obj):
-        worker = obj.resume.worker
+        account = obj.resume.account
         url = reverse(
-            f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
+            f'admin:{account._meta.app_label}_{account._meta.model_name}_change', args=(account.pk,)
         )
 
-        return format_html(self._link_format, url, str(worker.id))
+        return format_html(self._link_format, url, str(account.id))
 
 
 @admin.register(Answer)
@@ -50,12 +50,12 @@ class AnswerAdmin(admin.ModelAdmin):
         return format_html(self._link_format, url, str(question.id))
 
     def company_name(self, obj):
-        company = obj.question.company
+        account = obj.question.account
         url = reverse(
-            f'admin:{company._meta.app_label}_{company._meta.model_name}_change', args=(company.pk,)
+            f'admin:{account._meta.app_label}_{account._meta.model_name}_change', args=(account.pk,)
         )
 
-        return format_html(self._link_format, url, str(company.name))
+        return format_html(self._link_format, url, str(account.name))
 
     def question(self, obj):
         question = obj.question
@@ -66,9 +66,9 @@ class AnswerAdmin(admin.ModelAdmin):
         return format_html(self._link_format, url, str(question.detail))
 
     def worker_name(self, obj):
-        worker = obj.question.resume.worker
+        account = obj.question.resume.account
         url = reverse(
-            f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
+            f'admin:{account._meta.app_label}_{account._meta.model_name}_change', args=(account.pk,)
         )
 
-        return format_html(self._link_format, url, str(worker))
+        return format_html(self._link_format, url, str(account))

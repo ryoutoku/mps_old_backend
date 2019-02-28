@@ -42,9 +42,10 @@ SEX_TYPE_CHOICES = {
 }
 
 
-class Worker(models.Model):
-    """ユーザの一般情報を管理するクラス
+class WorkerBasicInfo(models.Model):
+    """workerの一般情報を管理するクラス
     """
+
     phone_number_regex = RegexValidator(regex=r'^[0-9]+$', message=(
         "Tel Number must be entered in the format: '09012345678'. Up to 15 digits allowed."))
 
@@ -53,9 +54,6 @@ class Worker(models.Model):
 
     is_activate = models.BooleanField(default=False,
                                       verbose_name="必須入力が完了したか否か")
-
-    is_open = models.BooleanField(default=False,
-                                  verbose_name="公開するか否か")
 
     last_name = models.CharField(max_length=10, null=True, blank=True,
                                  verbose_name="姓")
@@ -74,6 +72,37 @@ class Worker(models.Model):
 
     phone_number = models.CharField(validators=[phone_number_regex], max_length=15, null=True, blank=True,
                                     verbose_name='電話番号')
+
+    birth_day = models.DateField(null=True, blank=True,
+                                 verbose_name="生年月日")
+
+    sex = models.IntegerField(choices=SEX_TYPE_CHOICES, null=True, blank=True, default=0,
+                              verbose_name="性別")
+
+    bank_name = models.CharField(max_length=50, null=True, blank=True,
+                                 verbose_name="銀行名")
+
+    bank_office_code = models.CharField(max_length=5, null=True, blank=True,
+                                        verbose_name="銀行支店コード")
+
+    bank_account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=True, blank=True, default=0,
+                                            verbose_name="口座種類")
+
+    bank_account_number = models.CharField(max_length=16, null=True, blank=True,
+                                           verbose_name="口座番号")
+
+    def __str__(self):
+        return f"{self.last_name} {self.first_name}"
+
+
+class WorkerCondition(models.Model):
+    """workerの希望条件などを管理するクラス
+    """
+    account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker_condition',
+                                   verbose_name="Workerのアカウント", unique=True)
+
+    is_open = models.BooleanField(default=False,
+                                  verbose_name="公開するか否か")
 
     work_style = models.IntegerField(choices=WORK_STYLE_CHOICES, null=True, blank=True, default=0,
                                      verbose_name="稼働可能日数(ex. 週xx日〜)")
@@ -99,46 +128,15 @@ class Worker(models.Model):
     experience = models.IntegerField(null=True, blank=True, default=0,
                                      verbose_name="経験年数(単位:月)")
 
-    birth_day = models.DateField(null=True, blank=True,
-                                 verbose_name="生年月日")
-
-    sex = models.IntegerField(choices=SEX_TYPE_CHOICES, null=True, blank=True, default=0,
-                              verbose_name="性別")
-
     def __str__(self):
-        return f"{self.last_name} {self.first_name}"
-
-
-class WorkerBank(models.Model):
-    """ユーザの銀行口座情報
-    """
-    worker = models.OneToOneField(Worker, on_delete=models.CASCADE, related_name='bank',
-                                  verbose_name="対応ユーザ", null=False, blank=False)
-
-    is_activate = models.BooleanField(default=False,
-                                      verbose_name="入力が完了したか否か")
-
-    name = models.CharField(max_length=50, null=True, blank=True,
-                            verbose_name="銀行名")
-
-    office_code = models.CharField(max_length=5, null=True, blank=True,
-                                   verbose_name="銀行支店コード")
-
-    account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=True, blank=True, default=0,
-                                       verbose_name="口座種類")
-
-    account_number = models.CharField(max_length=16, null=True, blank=True,
-                                      verbose_name="口座番号")
-
-    def __str__(self):
-        return f"{self.name}"
+        return f"{self.account}"
 
 
 class Resume(models.Model):
     """ユーザの経験情報を管理するクラス
     """
-    worker = models.ForeignKey(Worker, on_delete=models.CASCADE, related_name='resumes',
-                               verbose_name="対応ユーザ")
+    account = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resumes',
+                                verbose_name="対応ユーザ")
 
     project_name = models.CharField(max_length=50,
                                     verbose_name="プロジェクト名")

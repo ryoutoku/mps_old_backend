@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 from worker.models import Resume
-from company.models import Company
+from certification.models import User
 
 
 class Question(models.Model):
@@ -12,7 +12,7 @@ class Question(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="question",
                                verbose_name="質問したレジュメ")
 
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="question",
+    account = models.ForeignKey(User, on_delete=models.CASCADE, related_name="question",
                                 verbose_name="質問した企業名")
 
     detail = models.TextField(verbose_name="質問内容",)

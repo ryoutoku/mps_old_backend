@@ -7,7 +7,6 @@ from rest_framework import generics
 from rest_framework import status
 
 from .models import Question, Answer
-from worker.models import Worker, Resume
 from company.models import Company
 from .selializer import QuestionSerializer, AnswerSerializer
 
@@ -39,7 +38,7 @@ class QuestionViewSet(viewsets.GenericViewSet,
             queryset = queryset.filter(company=self.request.user.company).all()
         else:
             resume = Resume.objects.filter(
-                worker=self.request.user.worker).all()
+                account=self.request.user).all()
             queryset = queryset.filter(
                 resume__in=resume).all()
         return queryset
@@ -68,7 +67,7 @@ class AnswerViewSet(viewsets.GenericViewSet,
     serializer_class = AnswerSerializer
 
     def get_queryset(self):
-        resume = Resume.objects.filter(worker=self.request.user.worker).all()
+        resume = Resume.objects.filter(account=self.request.user).all()
         question = Question.objects.filter(resume__in=resume).all()
         queryset = super().get_queryset()
         queryset = queryset.filter(question__in=question)
