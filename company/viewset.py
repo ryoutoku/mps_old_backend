@@ -19,6 +19,10 @@ class CompanyViewSet(viewsets.GenericViewSet,
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        return queryset.first()
+
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.filter(pk=self.request.user.company.id).all()

@@ -21,6 +21,10 @@ class WorkerViewSet(viewsets.GenericViewSet,
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
 
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        return queryset.first()
+
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.filter(pk=self.request.user.worker.id).all()
@@ -46,6 +50,10 @@ class BankViewSet(viewsets.GenericViewSet,
 
     queryset = WorkerBank.objects.all()
     serializer_class = BankSerializer
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        return queryset.first()
 
     def get_queryset(self):
         queryset = super().get_queryset()
