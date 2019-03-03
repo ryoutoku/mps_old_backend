@@ -192,7 +192,7 @@ class Resume(models.Model):
     tools = models.CharField(max_length=20,
                              verbose_name="開発ツール、フレームワークなど")
 
-    details = models.TextField(
+    detail = models.TextField(
         verbose_name="プロジェクト詳細")
 
     class Meta:

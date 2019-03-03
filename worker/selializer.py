@@ -77,5 +77,5 @@ class ResumeSerializer(serializers.ModelSerializer):
             "role_in_project",
             "project_scale",
             "tools",
-            "details",
+            "detail",
         )
