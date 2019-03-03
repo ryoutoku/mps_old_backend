@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
 
-from .models import WorkerBasicInfo, WorkerCondition, Resume
-from .selializer import WorkerBasicInfoSerializer, WorkerConditionSerializer, ResumeSerializer
+from .models import WorkerBasicInfo, WorkerCondition, Resume, Technology
+from .selializer import WorkerBasicInfoSerializer, WorkerConditionSerializer, ResumeSerializer, TechnologySerializer
 
 from utility.permission import IsWorker
 
@@ -88,3 +88,28 @@ class ResumeViewSet(viewsets.GenericViewSet,
         queryset = super().get_queryset()
         queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
+
+
+class TechnologyViewSet(viewsets.GenericViewSet,
+                        mixins.CreateModelMixin, mixins.ListModelMixin):
+    permission_classes = (IsAuthenticated)
+
+    queryset = Technology.objects.all()
+    serializer_class = TechnologySerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.all()
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        print(type(request.data))
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response(
+            {
+                "account_type": account,
+                "is_activated": is_activated
+            }
+        )

@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import WorkerBasicInfo, WorkerCondition, Resume
+from .models import WorkerBasicInfo, WorkerCondition, Resume, Technology
 
 
 class WorkerBasicInfoSerializer(serializers.ModelSerializer):
@@ -79,3 +79,18 @@ class ResumeSerializer(serializers.ModelSerializer):
             "tools",
             "detail",
         )
+
+
+class TechnologySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Technology
+
+        fields = {
+            "id",
+            "name"
+        }
+
+    def validate(self, attrs):
+        attrs["id"] = None
+        return attrs
