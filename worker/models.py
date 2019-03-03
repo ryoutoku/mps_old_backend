@@ -98,8 +98,8 @@ class WorkerBasicInfo(models.Model):
 class WorkerCondition(models.Model):
     """workerの希望条件などを管理するクラス
     """
-    account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker_condition',
-                                   verbose_name="Workerのアカウント", unique=True)
+    worker = models.OneToOneField(WorkerBasicInfo, on_delete=models.CASCADE, related_name='condition',
+                                  verbose_name="Workerのアカウント", unique=True)
 
     is_open = models.BooleanField(default=False,
                                   verbose_name="公開するか否か")
@@ -129,14 +129,14 @@ class WorkerCondition(models.Model):
                                      verbose_name="経験年数(単位:月)")
 
     def __str__(self):
-        return f"{self.account}"
+        return f"{self.worker}"
 
 
 class Resume(models.Model):
     """ユーザの経験情報を管理するクラス
     """
-    account = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resumes',
-                                verbose_name="対応ユーザ")
+    worker = models.ForeignKey(WorkerBasicInfo, on_delete=models.CASCADE, related_name='resumes',
+                               verbose_name="対応ユーザ")
 
     project_name = models.CharField(max_length=50,
                                     verbose_name="プロジェクト名")

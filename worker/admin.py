@@ -88,24 +88,15 @@ class WorkerConditionAdminForm(ModelForm):
         fields = "__all__"
 
     def clean_worker(self):
-        """accountが正しく設定できているかの追加確認
+        """workerが正しく設定できているかの追加確認
         """
-        account = self.cleaned_data["account"]
-        user = User.objects.filter(email=account).first()
+        worker = self.cleaned_data["worker"]
+        user = WorkerBasicInfo.objects.filter(pk=worker.id).first()
 
         if not user:
-            raise ValidationError(_("you must set active account"))
+            raise ValidationError(_("you must set active worker"))
 
-        if not user.is_active:
-            raise ValidationError(_("you must set active account"))
-
-        if user.is_staff or user.is_superuser:
-            raise ValidationError(_("you must set general account"))
-
-        if hasattr(user, 'company'):
-            raise ValidationError(_("you must set worker account"))
-
-        return account
+        return worker
 
 
 @admin.register(WorkerCondition)
@@ -118,7 +109,7 @@ class WorkerConditionAdmin(admin.ModelAdmin):
 
     def worker_name(self, obj):
 
-        worker = obj.account.worker
+        worker = obj.worker
         url = reverse(
             f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
         )
@@ -135,13 +126,13 @@ class ResumeAdminForm(ModelForm):
         fields = "__all__"
 
     def clean_worker(self):
-        """accountが正しく設定できているかの追加確認
+        """workerが正しく設定できているかの追加確認
         """
-
         worker = self.cleaned_data["worker"]
+        user = WorkerBasicInfo.objects.filter(pk=worker.id).first()
 
-        if not worker:
-            raise ValidationError(_("you must set worker account"))
+        if not user:
+            raise ValidationError(_("you must set active worker"))
 
         return worker
 

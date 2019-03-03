@@ -39,8 +39,6 @@ class WorkerBasicInfoViewSet(viewsets.GenericViewSet,
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.data["is_activated"] = True
-        print(serializer.data)
-
         queryset = self.get_queryset()
         queryset.update(**serializer.data)
         return Response(serializer.data)
@@ -61,7 +59,7 @@ class WorkerConditionViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(account=self.request.user).all()
+        queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -88,12 +86,5 @@ class ResumeViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(account=self.request.user).all()
+        queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
-
-    def perform_create(self, serializer):
-        data = serializer.data
-        data["worker"] = self.request.user.worker
-        obj = Resume.objects.create(**data)
-        obj.clean()
-        obj.save()
