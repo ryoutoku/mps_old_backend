@@ -11,8 +11,8 @@ class Company(models.Model):
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='company',
                                    verbose_name="Companyのアカウント", null=True, blank=True, unique=True)
 
-    is_activate = models.BooleanField(default=False,
-                                      verbose_name="入力が完了したか否か")
+    is_activated = models.BooleanField(default=False,
+                                       verbose_name="入力が完了したか否か")
 
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="企業名")

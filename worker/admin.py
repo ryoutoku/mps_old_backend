@@ -60,8 +60,8 @@ class WorkerBasicInfoAdmin(admin.ModelAdmin):
     form = WorkerBasicInfoAdminForm
     _link_format = "<a href='{}'>{}<\a>"
 
-    list_display = ("id", 'full_name', 'account_name', 'is_activate', )
-    list_filter = (NameFilter, 'is_activate',)
+    list_display = ("id", 'full_name', 'account_name', 'is_activated', )
+    list_filter = (NameFilter, 'is_activated',)
 
     def full_name(self, obj):
         return f"{obj.last_name} {obj.first_name}"

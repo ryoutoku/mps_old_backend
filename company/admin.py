@@ -58,8 +58,8 @@ class NameFilter(admin.SimpleListFilter):
 class CompanyAdmin(admin.ModelAdmin):
     form = CompanyAdminForm
 
-    list_display = ('name', 'account_name', 'is_activate', )
-    list_filter = (NameFilter, 'is_activate')
+    list_display = ('name', 'account_name', 'is_activated', )
+    list_filter = (NameFilter, 'is_activated')
 
     _user_link_format = "<a href='../../certification/user/{}/change'>{}<\a>"
 

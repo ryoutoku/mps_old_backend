@@ -35,15 +35,15 @@ class LoginViewSet(viewsets.GenericViewSet,
 
         if hasattr(request.user, "company"):
             account = "company"
-            is_activate = request.user.company.is_activate
+            is_activated = request.user.company.is_activated
         else:
             account = "worker"
-            is_activate = request.user.worker.is_activate
+            is_activated = request.user.worker.is_activated
 
         return Response(
             {
                 "account_type": account,
-                "is_activated": is_activate
+                "is_activated": is_activated
             }
         )
 

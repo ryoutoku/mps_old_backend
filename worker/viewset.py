@@ -38,6 +38,9 @@ class WorkerBasicInfoViewSet(viewsets.GenericViewSet,
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.data["is_activated"] = True
+        print(serializer.data)
+
         queryset = self.get_queryset()
         queryset.update(**serializer.data)
         return Response(serializer.data)
@@ -69,27 +72,9 @@ class WorkerConditionViewSet(viewsets.GenericViewSet,
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.data.is_activate = self._get_is_activate(serializer.data)
         queryset = self.get_queryset()
         queryset.update(**serializer.data)
         return Response(serializer.data)
-
-    def _get_is_activate(self, data):
-        """必須入力が入力されているか確認
-        """
-        last_name = data.last_name
-        first_name = data.first_name
-        last_name_kana = data.last_name_kana
-        first_name_kana = data.first_name_kana
-        address = data.address
-
-        if last_name is None or \
-                last_name_kana is None or \
-                first_name is None or \
-                first_name_kana is None or \
-                address is None:
-            return False
-        return True
 
 
 class ResumeViewSet(viewsets.GenericViewSet,

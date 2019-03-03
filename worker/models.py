@@ -52,8 +52,8 @@ class WorkerBasicInfo(models.Model):
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker',
                                    verbose_name="Workerのアカウント", unique=True)
 
-    is_activate = models.BooleanField(default=False,
-                                      verbose_name="必須入力が完了したか否か")
+    is_activated = models.BooleanField(default=False,
+                                       verbose_name="必須入力が完了したか否か")
 
     last_name = models.CharField(max_length=10, null=True, blank=True,
                                  verbose_name="姓")
