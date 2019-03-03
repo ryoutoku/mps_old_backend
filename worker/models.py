@@ -104,6 +104,19 @@ class WorkerBasicInfo(models.Model):
         return f"{self.last_name} {self.first_name}"
 
 
+class Technology(models.Model):
+    """技術領域
+    """
+    name = models.CharField(max_length=20,
+                            verbose_name="技術力域の表示用フィールド")
+
+    lower_name = models.CharField(max_length=20,
+                                  verbose_name="技術力域の検索用フィールド(lower_caseで保存)")
+
+    def __str__(self):
+        return str(self.name)
+
+
 class WorkerCondition(models.Model):
     """workerの希望条件などを管理するクラス
     """
@@ -122,8 +135,8 @@ class WorkerCondition(models.Model):
     working_status = models.IntegerField(choices=WORKING_STATUS_CHOICES, null=True, blank=True, default=0,
                                          verbose_name="稼働開始可能月")
 
-    interested_work = models.TextField(null=True, blank=True,
-                                       verbose_name="興味のある業種")
+    interested_work = models.ManyToManyField(Technology, blank=True,
+                                             verbose_name="興味のある業種")
 
     qiita_url = models.URLField(null=True, blank=True,
                                 verbose_name="QiitaのURL")
@@ -142,14 +155,16 @@ class WorkerCondition(models.Model):
 
 
 class ProjectType(models.Model):
-    project_type = models.CharField(max_length=20)
+    project_type = models.CharField(max_length=20,
+                                    verbose_name="プロジェクトの種類")
 
     def __str__(self):
         return str(self.project_type)
 
 
 class ChargeOfProcess(models.Model):
-    process_name = models.CharField(max_length=20)
+    process_name = models.CharField(max_length=20,
+                                    verbose_name="担当工程")
 
     def __str__(self):
         return str(self.process_name)
@@ -157,7 +172,8 @@ class ChargeOfProcess(models.Model):
 
 class RoleInProject(models.Model):
 
-    role_name = models.CharField(max_length=20)
+    role_name = models.CharField(max_length=20,
+                                 verbose_name="役割")
 
     def __str__(self):
         return str(self.role_name)
@@ -189,8 +205,8 @@ class Resume(models.Model):
     project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=True, blank=True, default=0,
                                         verbose_name="稼働可能日数(ex. 週xx日〜)")
 
-    tools = models.CharField(max_length=20,
-                             verbose_name="開発ツール、フレームワークなど")
+    tools = models.ManyToManyField(Technology, blank=True,
+                                   verbose_name="開発ツール、フレームワークなど")
 
     detail = models.TextField(
         verbose_name="プロジェクト詳細")

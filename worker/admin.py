@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
-from .models import WorkerBasicInfo, WorkerCondition, Resume, ProjectType, ChargeOfProcess, RoleInProject
+from .models import WorkerBasicInfo, WorkerCondition, Resume, ProjectType, ChargeOfProcess, RoleInProject, Technology
 from certification.models import User
 
 
@@ -161,14 +161,19 @@ class ResumeAdmin(admin.ModelAdmin):
 
 @admin.register(RoleInProject)
 class RoleInProjectAdmit(admin.ModelAdmin):
-    pass
+    list_display = ("id", "role_name")
 
 
 @admin.register(ChargeOfProcess)
 class ChargeOfProcessAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("id", "process_name")
 
 
 @admin.register(ProjectType)
 class ProjectTypeAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("id", "project_type")
+
+
+@admin.register(Technology)
+class TechnologyAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "lower_name")
