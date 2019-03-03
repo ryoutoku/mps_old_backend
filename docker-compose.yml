@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   career:
     restart: always
@@ -6,33 +6,34 @@ services:
     command: >
       bash -c 'python manage.py makemigrations &&
       python manage.py migrate &&
+      python manage.py loaddata worker/fixtures/initial_data.json &&
       python manage.py collectstatic --no-input &&
       gunicorn -b 0.0.0.0:8000 career.wsgi'
     env_file:
       - career.env
     ports:
-     - "8000:8000"
+      - "8000:8000"
     working_dir: /code/
     volumes:
-     - .:/code
-     - ./static/:/code/static
+      - .:/code
+      - ./static/:/code/static
     networks:
-     - career-network
+      - career-network
   nginx:
     image: nginx
     restart: always
     ports:
-     - "80:80"
-     - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-     - ./Dockerfiles/nginx/:/etc/nginx
-     - ./static:/www/static
-     - ./cert:/etc/nginx/certs:ro
-     - ./media:/media
+      - ./Dockerfiles/nginx/:/etc/nginx
+      - ./static:/www/static
+      - ./cert:/etc/nginx/certs:ro
+      - ./media:/media
     depends_on:
-     - career
+      - career
     networks:
-     - career-network
+      - career-network
 networks:
   career-network:
     external: false

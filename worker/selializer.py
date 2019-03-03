@@ -72,8 +72,10 @@ class ResumeSerializer(serializers.ModelSerializer):
             "project_name",
             "started_at",
             "ended_at",
-            "position",
-            "scale",
+            "project_type",
+            "charge_of_process",
+            "role_in_project",
+            "project_scale",
             "tools",
             "details",
         )

@@ -41,6 +41,15 @@ SEX_TYPE_CHOICES = {
     (2, '女性')
 }
 
+PROJECT_SCALE_CHOICES = {
+    (0, '---未登録---'),
+    (1, '~5人'),
+    (2, '6~10人'),
+    (3, '11~20人'),
+    (4, '21~40人'),
+    (5, '41人~'),
+}
+
 
 class WorkerBasicInfo(models.Model):
     """workerの一般情報を管理するクラス
@@ -132,6 +141,28 @@ class WorkerCondition(models.Model):
         return f"{self.worker}"
 
 
+class ProjectType(models.Model):
+    project_type = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.project_type)
+
+
+class ChargeOfProcess(models.Model):
+    process_name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.process_name)
+
+
+class RoleInProject(models.Model):
+
+    role_name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.role_name)
+
+
 class Resume(models.Model):
     """ユーザの経験情報を管理するクラス
     """
@@ -146,11 +177,17 @@ class Resume(models.Model):
     ended_at = models.DateField(null=True, blank=True,
                                 verbose_name="終了年月")
 
-    position = models.CharField(max_length=20,
-                                verbose_name="プロジェクトでのポジション")
+    project_type = models.ManyToManyField(ProjectType, blank=True,
+                                          verbose_name="プロジェクトの種類")
 
-    scale = models.CharField(max_length=20,
-                             verbose_name="開発規模")
+    charge_of_process = models.ManyToManyField(ChargeOfProcess, blank=True,
+                                               verbose_name="担当工程")
+
+    role_in_project = models.ManyToManyField(RoleInProject, blank=True,
+                                             verbose_name="プロジェクトでの役割")
+
+    project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=True, blank=True, default=0,
+                                        verbose_name="稼働可能日数(ex. 週xx日〜)")
 
     tools = models.CharField(max_length=20,
                              verbose_name="開発ツール、フレームワークなど")
