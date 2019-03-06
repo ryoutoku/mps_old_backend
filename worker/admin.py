@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 from .models import WorkerBasicInfo, WorkerCondition, Resume, ProjectType, ChargeOfProcess, RoleInProject, Technology
-from certification.models import User
+from authentication.models import User
 
 
 class WorkerBasicInfoAdminForm(ModelForm):

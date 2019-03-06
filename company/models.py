@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from certification.models import User
+from authentication.models import User
 
 
 class Company(models.Model):

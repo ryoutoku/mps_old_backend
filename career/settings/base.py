@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'utility',
-    'certification',
+    'authentication',
     'company',
     'worker',
     'resume',
@@ -109,6 +109,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-AUTH_USER_MODEL = 'certification.User'
+AUTH_USER_MODEL = 'authentication.User'
 
 EMAIL_BACKEND = 'django_ses.SESBackend'

@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 from worker.models import Resume
-from certification.models import User
+from authentication.models import User
 
 
 class Question(models.Model):

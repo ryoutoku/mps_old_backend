@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
 
-from certification.models import User
+from authentication.models import User
 
 WORKING_STATUS_CHOICES = (
     (0, '---未登録---'),

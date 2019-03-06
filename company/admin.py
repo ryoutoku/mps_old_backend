@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 from .models import Company, Project
-from certification.models import User
+from authentication.models import User
 
 
 class CompanyAdminForm(ModelForm):
@@ -61,7 +61,7 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ('name', 'account_name', 'is_activated', )
     list_filter = (NameFilter, 'is_activated')
 
-    _user_link_format = "<a href='../../certification/user/{}/change'>{}<\a>"
+    _user_link_format = "<a href='../../authentication/user/{}/change'>{}<\a>"
 
     def account_name(self, obj):
         return format_html(self._user_link_format, obj.account.id, str(obj.account))
