@@ -92,7 +92,8 @@ class ResumeViewSet(viewsets.GenericViewSet,
 
 class TechnologyViewSet(viewsets.GenericViewSet,
                         mixins.CreateModelMixin, mixins.ListModelMixin):
-    permission_classes = (IsAuthenticated)
+    authentication_classes = (SessionAuthentication, )
+    permission_classes = (IsAuthenticated, )
 
     queryset = Technology.objects.all()
     serializer_class = TechnologySerializer
@@ -103,13 +104,13 @@ class TechnologyViewSet(viewsets.GenericViewSet,
         return queryset
 
     def create(self, request, *args, **kwargs):
-        print(type(request.data))
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
+        for data in serializer.data:
+            name = data["name"]
 
-        return Response(
-            {
-                "account_type": account,
-                "is_activated": is_activated
-            }
-        )
+            if Technology.objects.filter(name=name).first() is None:
+                Technology.objects.create(
+                    name=name, lower_name=name.lower()).save()
+
+        return Response()

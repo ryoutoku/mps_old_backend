@@ -108,10 +108,10 @@ class Technology(models.Model):
     """技術領域
     """
     name = models.CharField(max_length=20,
-                            verbose_name="技術力域の表示用フィールド")
+                            verbose_name="技術領域の表示用フィールド")
 
     lower_name = models.CharField(max_length=20,
-                                  verbose_name="技術力域の検索用フィールド(lower_caseで保存)")
+                                  verbose_name="技術領域の検索用フィールド(lower_caseで保存)")
 
     def __str__(self):
         return str(self.name)

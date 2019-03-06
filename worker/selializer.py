@@ -86,10 +86,9 @@ class TechnologySerializer(serializers.ModelSerializer):
     class Meta:
         model = Technology
 
-        fields = {
-            "id",
-            "name"
-        }
+        fields = (
+            "name",
+        )
 
     def validate(self, attrs):
         attrs["id"] = None
