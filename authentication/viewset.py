@@ -100,7 +100,7 @@ class SingUpViewSet(viewsets.GenericViewSet,
     def _create_worker(self, user):
         worker = WorkerBasicInfo.objects.create(account=user)
         worker.save()
-        worker_bank = WorkerCondition.objects.create(account=user)
+        worker_bank = WorkerCondition.objects.create(worker=worker)
         worker_bank.save()
 
     def _create_company(self, user):
