@@ -34,7 +34,6 @@ class WorkerBasicInfoViewSet(viewsets.GenericViewSet,
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.data["is_activated"] = True
         queryset = self.get_queryset()
         queryset.update(**serializer.data)
         return Response(serializer.data)
