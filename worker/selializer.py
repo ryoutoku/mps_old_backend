@@ -103,6 +103,7 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
 
             if tech is None:
                 tech = Technology.objects.create(name=tech_data["name"])
+                tech.save()
 
             instance.interested_work.add(tech)
         return instance
