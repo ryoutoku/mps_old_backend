@@ -176,4 +176,4 @@ class ProjectTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Technology)
 class TechnologyAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "lower_name")
+    list_display = ("id", "name")
