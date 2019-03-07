@@ -88,7 +88,7 @@ class TechnologyViewSet(viewsets.GenericViewSet,
     authentication_classes = (SessionAuthentication, )
     permission_classes = (IsAuthenticated, )
 
-    queryset = Technology.objects.all()
+    queryset = Technology.objects.order_by('name')
     serializer_class = TechnologySerializer
 
     def get_queryset(self):
