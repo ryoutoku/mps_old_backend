@@ -46,7 +46,19 @@ class WorkerBasicInfoSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class TechnologySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Technology
+
+        fields = (
+            "name",
+        )
+
+
 class WorkerConditionSerializer(serializers.ModelSerializer):
+
+    interested_work = TechnologySerializer(many=True)
 
     class Meta:
         model = WorkerCondition
@@ -62,6 +74,38 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
             "github_url",
             "other_url",
         )
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+
+        instance.is_open = validated_data.get(
+            "is_open", instance.is_open)
+        instance.experience = validated_data.get(
+            "experience", instance.experience)
+        instance.work_style = validated_data.get(
+            "work_style", instance.work_style)
+        instance.working_status = validated_data.get(
+            "working_status", instance.working_status)
+        instance.hope_fee = validated_data.get(
+            "hope_fee", instance.hope_fee)
+        instance.qiita_url = validated_data.get(
+            "qiita_url", instance.qiita_url)
+        instance.github_url = validated_data.get(
+            "github_url", instance.github_url)
+        instance.other_url = validated_data.get(
+            "other_url", instance.other_url)
+
+        tech_list = validated_data.pop("interested_work")
+
+        for tech_data in tech_list:
+            tech = Technology.objects.filter(
+                name__iexact=tech_data["name"]).first()
+
+            if tech is None:
+                tech = Technology.objects.create(name=tech_data["name"])
+
+            instance.interested_work.add(tech)
+        return instance
 
 
 class ResumeSerializer(serializers.ModelSerializer):
@@ -79,17 +123,3 @@ class ResumeSerializer(serializers.ModelSerializer):
             "tools",
             "detail",
         )
-
-
-class TechnologySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Technology
-
-        fields = (
-            "name",
-        )
-
-    def validate(self, attrs):
-        attrs["id"] = None
-        return attrs

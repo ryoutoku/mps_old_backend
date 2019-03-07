@@ -22,16 +22,12 @@ class WorkerBasicInfoViewSet(viewsets.GenericViewSet,
     serializer_class = WorkerBasicInfoSerializer
 
     def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = super().get_queryset()
+        queryset = queryset.filter(account=self.request.user)
         return queryset.first()
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(account=self.request.user).all()
-        return queryset
-
     def list(self, request, *args, **kwargs):
-        data = self.get_queryset().first()
+        data = self.get_object()
         serializer = self.get_serializer(data)
         return Response(serializer.data)
 
@@ -54,24 +50,22 @@ class WorkerConditionViewSet(viewsets.GenericViewSet,
     serializer_class = WorkerConditionSerializer
 
     def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = super().get_queryset()
+        queryset = queryset.filter(worker=self.request.user.worker)
         return queryset.first()
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(worker=self.request.user.worker).all()
-        return queryset
-
     def list(self, request, *args, **kwargs):
-        data = self.get_queryset().first()
+        data = self.get_object()
         serializer = self.get_serializer(data)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        queryset = self.get_queryset()
-        queryset.update(**serializer.data)
+
+        instance = self.get_object()
+        serializer.update(instance, serializer.data)
+        instance.save()
         return Response(serializer.data)
 
 
@@ -91,7 +85,7 @@ class ResumeViewSet(viewsets.GenericViewSet,
 
 
 class TechnologyViewSet(viewsets.GenericViewSet,
-                        mixins.CreateModelMixin, mixins.ListModelMixin):
+                        mixins.ListModelMixin):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (IsAuthenticated, )
 
@@ -102,15 +96,3 @@ class TechnologyViewSet(viewsets.GenericViewSet,
         queryset = super().get_queryset()
         queryset = queryset.all()
         return queryset
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        for data in serializer.data:
-            name = data["name"]
-
-            if Technology.objects.filter(name=name).first() is None:
-                Technology.objects.create(
-                    name=name, lower_name=name.lower()).save()
-
-        return Response()
