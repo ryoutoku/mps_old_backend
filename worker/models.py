@@ -203,7 +203,7 @@ class Resume(models.Model):
                                              verbose_name="プロジェクトでの役割")
 
     project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=True, blank=True, default=0,
-                                        verbose_name="稼働可能日数(ex. 週xx日〜)")
+                                        verbose_name="プロジェクトの規模(人数)")
 
     tools = models.ManyToManyField(Technology, blank=True,
                                    verbose_name="開発ツール、フレームワークなど")
