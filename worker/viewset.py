@@ -22,9 +22,12 @@ class WorkerBasicInfoViewSet(viewsets.GenericViewSet,
     serializer_class = WorkerBasicInfoSerializer
 
     def get_object(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(account=self.request.user)
+        queryset = self.get_queryset()
         return queryset.first()
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(account=self.request.user).all()
 
     def list(self, request, *args, **kwargs):
         data = self.get_object()
@@ -49,9 +52,12 @@ class WorkerConditionViewSet(viewsets.GenericViewSet,
     serializer_class = WorkerConditionSerializer
 
     def get_object(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(worker=self.request.user.worker)
+        queryset = self.get_queryset()
         return queryset.first()
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(worker=self.request.user.worker).all()
 
     def list(self, request, *args, **kwargs):
         data = self.get_object()
@@ -78,9 +84,12 @@ class ResumeViewSet(viewsets.GenericViewSet,
     serializer_class = ResumeSerializer
 
     def get_object(self):
+        queryset = self.get_queryset()
+        return queryset.first()
+
+    def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(worker=self.request.user.worker).all()
-        return queryset
+        return queryset.filter(worker=self.request.user.worker).all()
 
 
 class TechnologyViewSet(viewsets.GenericViewSet,
@@ -90,8 +99,3 @@ class TechnologyViewSet(viewsets.GenericViewSet,
 
     queryset = Technology.objects.all()
     serializer_class = TechnologySerializer
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.all()
-        return queryset
