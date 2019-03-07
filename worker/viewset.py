@@ -74,10 +74,10 @@ class ResumeViewSet(viewsets.GenericViewSet,
     authentication_classes = (SessionAuthentication, )
     permission_classes = (IsAuthenticated and IsWorker,)
 
-    queryset = Resume.objects.order_by('started_at')
+    queryset = Resume.objects.all()
     serializer_class = ResumeSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         queryset = super().get_queryset()
         queryset = queryset.filter(worker=self.request.user.worker).all()
         return queryset
@@ -88,7 +88,7 @@ class TechnologyViewSet(viewsets.GenericViewSet,
     authentication_classes = (SessionAuthentication, )
     permission_classes = (IsAuthenticated, )
 
-    queryset = Technology.objects.order_by('name')
+    queryset = Technology.objects.all()
     serializer_class = TechnologySerializer
 
     def get_queryset(self):

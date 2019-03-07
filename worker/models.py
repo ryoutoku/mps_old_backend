@@ -113,6 +113,9 @@ class Technology(models.Model):
     def __str__(self):
         return str(self.name)
 
+    class Meta:
+        ordering = ("name", )
+
 
 class WorkerCondition(models.Model):
     """workerの希望条件などを管理するクラス
@@ -209,7 +212,7 @@ class Resume(models.Model):
         verbose_name="プロジェクト詳細")
 
     class Meta:
-        ordering = ("started_at", )
+        ordering = ("-started_at", )
 
     def __str__(self):
         return str(self.project_name)
