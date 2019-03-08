@@ -55,8 +55,14 @@ class WorkerBasicInfo(models.Model):
     """workerの一般情報を管理するクラス
     """
 
-    phone_number_regex = RegexValidator(regex=r'^[0-9]+$', message=(
-        "Tel Number must be entered in the format: '09012345678'. Up to 15 digits allowed."))
+    phone_number_regex = RegexValidator(regex=r'^\d{10,11}$', message=(
+        "Tel Number must be entered 10 or 11 digits."))
+
+    bank_code_regex = RegexValidator(regex=r'^\d{3}$', message=(
+        "bank code must be entered 3 digits."))
+
+    bank_number_regex = RegexValidator(regex=r'^\d{7}$', message=(
+        "bank code must be entered 7 digits."))
 
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker',
                                    verbose_name="Workerのアカウント", unique=True)
@@ -91,14 +97,14 @@ class WorkerBasicInfo(models.Model):
     bank_name = models.CharField(max_length=50, null=True, blank=True,
                                  verbose_name="銀行名")
 
-    bank_office_code = models.IntegerField(null=True, blank=True,
-                                           verbose_name="銀行支店コード")
+    bank_office_code = models.CharField(validators=[bank_code_regex], max_length=3, null=True, blank=True,
+                                        verbose_name="銀行支店コード")
 
     bank_account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=False, blank=True, default=0,
                                             verbose_name="口座種類")
 
-    bank_account_number = models.IntegerField(null=True, blank=True,
-                                              verbose_name="口座番号")
+    bank_account_number = models.CharField(validators=[bank_number_regex], max_length=7, null=True, blank=True,
+                                           verbose_name="口座番号")
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
