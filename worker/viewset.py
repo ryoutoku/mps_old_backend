@@ -67,10 +67,8 @@ class WorkerConditionViewSet(viewsets.GenericViewSet,
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         instance = self.get_object()
         serializer.update(instance, serializer.data)
-        instance.save()
         return Response(serializer.data)
 
 

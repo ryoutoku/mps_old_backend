@@ -76,8 +76,6 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        print(validated_data)
-
         instance.is_open = validated_data.get(
             "is_open", instance.is_open)
         instance.experience = validated_data.get(
@@ -106,6 +104,7 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
                 tech.save()
 
             instance.interested_work.add(tech)
+        instance.save()
         return instance
 
 
