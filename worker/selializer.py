@@ -109,6 +109,9 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
 
 
 class ResumeSerializer(serializers.ModelSerializer):
+
+    tools = TechnologySerializer(many=True)
+
     class Meta:
         model = Resume
         fields = (
