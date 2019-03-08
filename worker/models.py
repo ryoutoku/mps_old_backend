@@ -85,20 +85,20 @@ class WorkerBasicInfo(models.Model):
     birth_day = models.DateField(null=True, blank=True,
                                  verbose_name="生年月日")
 
-    sex = models.IntegerField(choices=SEX_TYPE_CHOICES, null=True, blank=True, default=0,
+    sex = models.IntegerField(choices=SEX_TYPE_CHOICES, null=False, blank=True, default=0,
                               verbose_name="性別")
 
     bank_name = models.CharField(max_length=50, null=True, blank=True,
                                  verbose_name="銀行名")
 
-    bank_office_code = models.CharField(max_length=5, null=True, blank=True,
-                                        verbose_name="銀行支店コード")
+    bank_office_code = models.IntegerField(null=True, blank=True,
+                                           verbose_name="銀行支店コード")
 
-    bank_account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=True, blank=True, default=0,
+    bank_account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=False, blank=True, default=0,
                                             verbose_name="口座種類")
 
-    bank_account_number = models.CharField(max_length=16, null=True, blank=True,
-                                           verbose_name="口座番号")
+    bank_account_number = models.IntegerField(null=True, blank=True,
+                                              verbose_name="口座番号")
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
@@ -126,13 +126,13 @@ class WorkerCondition(models.Model):
     is_open = models.BooleanField(default=False,
                                   verbose_name="公開するか否か")
 
-    work_style = models.IntegerField(choices=WORK_STYLE_CHOICES, null=True, blank=True, default=0,
+    work_style = models.IntegerField(choices=WORK_STYLE_CHOICES, null=False, blank=True, default=0,
                                      verbose_name="稼働可能日数(ex. 週xx日〜)")
 
     hope_fee = models.IntegerField(null=True, blank=True,
                                    verbose_name="希望する単金")
 
-    working_status = models.IntegerField(choices=WORKING_STATUS_CHOICES, null=True, blank=True, default=0,
+    working_status = models.IntegerField(choices=WORKING_STATUS_CHOICES, null=False, blank=True, default=0,
                                          verbose_name="稼働開始可能月")
 
     interested_work = models.ManyToManyField(Technology, blank=True,
@@ -147,7 +147,7 @@ class WorkerCondition(models.Model):
     other_url = models.URLField(null=True, blank=True,
                                 verbose_name="その他のURL")
 
-    experience = models.IntegerField(null=True, blank=True, default=0,
+    experience = models.IntegerField(null=False, blank=True, default=0,
                                      verbose_name="経験年数(単位:月)")
 
     def __str__(self):
@@ -202,7 +202,7 @@ class Resume(models.Model):
     role_in_project = models.ManyToManyField(RoleInProject, blank=True,
                                              verbose_name="プロジェクトでの役割")
 
-    project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=True, blank=True, default=0,
+    project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=False, blank=True, default=0,
                                         verbose_name="プロジェクトの規模(人数)")
 
     tools = models.ManyToManyField(Technology, blank=True,
