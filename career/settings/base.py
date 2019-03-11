@@ -112,3 +112,6 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'authentication.User'
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 20 * 60
