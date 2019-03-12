@@ -1,145 +1,166 @@
 [{
-    "model": "worker.projecttype",
-    "pk": 0,
-    "fields": {
-        "project_type": "Web\u30b5\u30fc\u30d3\u30b9"
+        "model": "worker.projecttype",
+        "pk": 0,
+        "fields": {
+            "project_type": "Web\u30b5\u30fc\u30d3\u30b9"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 1,
+        "fields": {
+            "project_type": "iOS"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 2,
+        "fields": {
+            "project_type": "Android"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 3,
+        "fields": {
+            "project_type": "\u30b2\u30fc\u30e0"
+        }
+    },
+    {
+        "model": "worker.projecttype",
+        "pk": 4,
+        "fields": {
+            "project_type": "B to B"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 5,
+        "fields": {
+            "project_type": "B to C"
+        }
+    },
+    {
+        "model": "worker.projecttype",
+        "pk": 6,
+        "fields": {
+            "project_type": "C to B"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 7,
+        "fields": {
+            "project_type": "C to C"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 8,
+        "fields": {
+            "project_type": "\u793e\u5916\u5411\u3051\u30b7\u30b9\u30c6\u30e0"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 9,
+        "fields": {
+            "project_type": "\u793e\u5185\u5411\u3051\u30b7\u30b9\u30c6\u30e0"
+        }
+    }, {
+        "model": "worker.projecttype",
+        "pk": 10,
+        "fields": {
+            "project_type": "\u30c7\u30fc\u30bf\u5206\u6790"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 0,
+        "fields": {
+            "process_name": "\u4f01\u753b"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 1,
+        "fields": {
+            "process_name": "\u8981\u4ef6\u5b9a\u7fa9"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 2,
+        "fields": {
+            "process_name": "\u8a2d\u8a08"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 3,
+        "fields": {
+            "process_name": "\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 4,
+        "fields": {
+            "process_name": "\u30c6\u30b9\u30c8"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 5,
+        "fields": {
+            "process_name": "\u904b\u7528/\u4fdd\u5b88"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 6,
+        "fields": {
+            "process_name": "PoC"
+        }
+    }, {
+        "model": "worker.chargeofprocess",
+        "pk": 7,
+        "fields": {
+            "process_name": "\u30c7\u30fc\u30bf\u5206\u6790"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 0,
+        "fields": {
+            "role_name": "\u30c7\u30b6\u30a4\u30ca"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 1,
+        "fields": {
+            "role_name": "\u30d5\u30ed\u30f3\u30c8\u30a8\u30f3\u30c9\u30a8\u30f3\u30b8\u30cb\u30a2"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 2,
+        "fields": {
+            "role_name": "\u30d0\u30c3\u30af\u30a8\u30f3\u30c9\u30a8\u30f3\u30b8\u30cb\u30a2"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 3,
+        "fields": {
+            "role_name": "\u30a4\u30f3\u30d5\u30e9\u30b9\u30c8\u30e9\u30af\u30c1\u30e3\u30a8\u30f3\u30b8\u30cb\u30a2"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 4,
+        "fields": {
+            "role_name": "\u30cd\u30c3\u30c8\u30ef\u30fc\u30af\u30a8\u30f3\u30b8\u30cb\u30a2"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 5,
+        "fields": {
+            "role_name": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u30de\u30cd\u30fc\u30b8\u30e3"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 6,
+        "fields": {
+            "role_name": "\u30c7\u30fc\u30bf\u30a8\u30f3\u30b8\u30cb\u30a2"
+        }
+    }, {
+        "model": "worker.roleinproject",
+        "pk": 7,
+        "fields": {
+            "role_name": "\u30c7\u30fc\u30bf\u30b5\u30a4\u30a8\u30f3\u30c6\u30a3\u30b9\u30c8"
+        }
     }
-}, {
-    "model": "worker.projecttype",
-    "pk": 1,
-    "fields": {
-        "project_type": "iOS"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 2,
-    "fields": {
-        "project_type": "Android"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 3,
-    "fields": {
-        "project_type": "\u30b2\u30fc\u30e0"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 4,
-    "fields": {
-        "project_type": "to C\u30b7\u30b9\u30c6\u30e0"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 5,
-    "fields": {
-        "project_type": "to B\u30b7\u30b9\u30c6\u30e0"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 6,
-    "fields": {
-        "project_type": "\u793e\u5916\u5411\u3051\u30b7\u30b9\u30c6\u30e0"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 7,
-    "fields": {
-        "project_type": "\u793e\u5185\u5411\u3051\u30b7\u30b9\u30c6\u30e0"
-    }
-}, {
-    "model": "worker.projecttype",
-    "pk": 8,
-    "fields": {
-        "project_type": "\u30c7\u30fc\u30bf\u5206\u6790"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 0,
-    "fields": {
-        "process_name": "\u4f01\u753b"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 1,
-    "fields": {
-        "process_name": "\u8981\u4ef6\u5b9a\u7fa9"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 2,
-    "fields": {
-        "process_name": "\u8a2d\u8a08"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 3,
-    "fields": {
-        "process_name": "\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 4,
-    "fields": {
-        "process_name": "\u30c6\u30b9\u30c8"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 5,
-    "fields": {
-        "process_name": "\u904b\u7528/\u4fdd\u5b88"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 6,
-    "fields": {
-        "process_name": "PoC"
-    }
-}, {
-    "model": "worker.chargeofprocess",
-    "pk": 7,
-    "fields": {
-        "process_name": "\u30c7\u30fc\u30bf\u5206\u6790"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 0,
-    "fields": {
-        "role_name": "\u30c7\u30b6\u30a4\u30f3"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 1,
-    "fields": {
-        "role_name": "\u30d5\u30ed\u30f3\u30c8\u30a8\u30f3\u30c9"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 2,
-    "fields": {
-        "role_name": "\u30d0\u30c3\u30af\u30a8\u30f3\u30c9"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 3,
-    "fields": {
-        "role_name": "\u30a4\u30f3\u30d5\u30e9\u30b9\u30c8\u30e9\u30af\u30c1\u30e3"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 4,
-    "fields": {
-        "role_name": "\u30de\u30cd\u30b8\u30e1\u30f3\u30c8"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 5,
-    "fields": {
-        "role_name": "\u30c7\u30fc\u30bf\u30a8\u30f3\u30b8\u30cb\u30a2"
-    }
-}, {
-    "model": "worker.roleinproject",
-    "pk": 6,
-    "fields": {
-        "role_name": "\u30c7\u30fc\u30bf\u30b5\u30a4\u30a8\u30f3\u30c6\u30a3\u30b9\u30c8"
-    }
-}]
+]
