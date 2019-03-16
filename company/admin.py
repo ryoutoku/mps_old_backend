@@ -2,7 +2,6 @@ from django.db.models import Q
 from django.contrib import admin
 from django.forms import ValidationError, ModelForm
 from django.utils.translation import ugettext_lazy as _
-from django.utils.html import format_html
 
 from .models import CompanyBasicInfo, CompanyStaff, Project
 from authentication.models import User

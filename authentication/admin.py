@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from .models import User, SignUpToken
 from django import forms
-from django.utils.html import format_html
+from utility.admin_helper import get_model_link
 
 
 class MyUserChangeForm(UserChangeForm):
@@ -85,19 +85,14 @@ class MyUserAdmin(UserAdmin):
     search_fields = ('is_superuser', 'is_active')
     ordering = ('email',)
 
-    _worker_link_format = "<a href='../../worker/worker/{}/change'>{}<\a>"
-    _company_link_format = "<a href='../../company/company/{}/change'>{}<\a>"
-
     def worker_name(self, obj):
         if obj.worker is not None:
-            return format_html(self._worker_link_format,
-                               obj.worker.id, str(obj.worker))
+            return get_model_link(obj.worker, str(obj.worker))
         return None
 
     def company_name(self, obj):
         if obj.company is not None:
-            return format_html(self._company_link_format,
-                               obj.company.id, str(obj.company))
+            return get_model_link(obj.company, str(obj.company))
         return None
 
     worker_name.admin_order_field = 'worker__account'
