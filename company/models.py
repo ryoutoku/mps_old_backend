@@ -36,8 +36,11 @@ class CompanyBasicInfo(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="企業名")
 
-    representative_name = models.CharField(max_length=10, null=True, blank=True,
-                                           verbose_name="代表者氏名")
+    representative_last_name = models.CharField(max_length=10, null=True, blank=True,
+                                                verbose_name="代表者氏名")
+
+    representative_first_name = models.CharField(max_length=10, null=True, blank=True,
+                                                 verbose_name="代表者氏名")
 
     establishment_date = models.DateField(null=True, blank=True,
                                           verbose_name="設立日")
@@ -93,6 +96,12 @@ class CompanyStaff(models.Model):
 
     staff_first_name = models.CharField(max_length=10, null=True, blank=True,
                                         verbose_name="担当者:名")
+
+    staff_last_name_kana = models.CharField(max_length=10, null=True, blank=True,
+                                            verbose_name="担当者:セイ")
+
+    staff_first_name_kana = models.CharField(max_length=10, null=True, blank=True,
+                                             verbose_name="担当者:メイ")
 
     staff_department = models.CharField(max_length=20, null=True, blank=True,
                                         verbose_name="担当者所属部署")
