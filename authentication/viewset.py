@@ -8,7 +8,7 @@ from rest_framework import status
 
 from .models import User, SignUpToken, TOKEN_ATTRIBUTE
 from worker.models import WorkerBasicInfo, WorkerCondition
-from company.models import Company
+from company.models import CompanyBasicInfo, CompanyStaff
 from .selializer import LoginSerializer, LogoutSerializer, SingUpSerializer
 
 
@@ -104,5 +104,7 @@ class SingUpViewSet(viewsets.GenericViewSet,
         worker_bank.save()
 
     def _create_company(self, user):
-        company = Company.objects.create(account=user)
+        company = CompanyBasicInfo.objects.create(account=user)
         company.save()
+        company_staff = CompanyStaff.objects.create(company=company)
+        company_staff.save()

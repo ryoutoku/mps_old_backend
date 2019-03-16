@@ -7,6 +7,7 @@ from django.utils.html import format_html
 
 from .models import WorkerBasicInfo, WorkerCondition, Resume, ProjectType, ChargeOfProcess, RoleInProject, Technology
 from authentication.models import User
+from utility.admin_helper import get_model_link
 
 
 class WorkerBasicInfoAdminForm(ModelForm):
@@ -58,7 +59,6 @@ class NameFilter(admin.SimpleListFilter):
 @admin.register(WorkerBasicInfo)
 class WorkerBasicInfoAdmin(admin.ModelAdmin):
     form = WorkerBasicInfoAdminForm
-    _link_format = "<a href='{}'>{}<\a>"
 
     list_display = ("id", 'full_name', 'account_name', 'is_activated', )
     list_filter = (NameFilter, 'is_activated',)
@@ -68,11 +68,7 @@ class WorkerBasicInfoAdmin(admin.ModelAdmin):
 
     def account_name(self, obj):
         account = obj.account
-        url = reverse(
-            f'admin:{account._meta.app_label}_{account._meta.model_name}_change', args=(account.pk,)
-        )
-
-        return format_html(self._link_format, url, str(account))
+        return get_model_link(account, str(account))
 
     full_name.admin_order_field = 'last_name'
     full_name.short_description = '個人名'
@@ -105,15 +101,9 @@ class WorkerConditionAdmin(admin.ModelAdmin):
 
     list_display = ("id", "worker_name", )
 
-    _link_format = "<a href='{}'>{}<\a>"
-
     def worker_name(self, obj):
-
         worker = obj.worker
-        url = reverse(
-            f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
-        )
-        return format_html(self._link_format, url, str(worker))
+        return get_model_link(worker, str(worker))
 
     worker_name.admin_order_field = 'worker'
     worker_name.short_description = "個人名"
@@ -145,15 +135,9 @@ class ResumeAdmin(admin.ModelAdmin):
                     "started_at", "ended_at")
     list_filter = ("started_at", "ended_at")
 
-    _link_format = "<a href='{}'>{}<\a>"
-
     def worker_name(self, obj):
-
         worker = obj.worker
-        url = reverse(
-            f'admin:{worker._meta.app_label}_{worker._meta.model_name}_change', args=(worker.pk,)
-        )
-        return format_html(self._link_format, url, str(worker))
+        return get_model_link(worker, str(worker))
 
     worker_name.admin_order_field = 'worker'
     worker_name.short_description = "個人名"

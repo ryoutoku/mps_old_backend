@@ -3,9 +3,28 @@ from django.utils import timezone
 
 from authentication.models import User
 
+GARMENTS_CHOICES = (
+    (0, '---未登録---'),
+    (1, '規定あり'),
+    (2, '私服OK'),
+    (3, '要相談'),
+)
 
-class Company(models.Model):
-    """企業の情報を管理するクラス
+RESTROOM_CHOICES = (
+    (0, '---未登録---'),
+    (1, '男女別'),
+    (2, '男女共用'),
+)
+
+USE_CHOICES = (
+    (0, '---未登録---'),
+    (1, '利用可'),
+    (2, '利用不可'),
+)
+
+
+class CompanyBasicInfo(models.Model):
+    """企業の基本情報を管理するクラス
     """
 
     account = models.OneToOneField(User, on_delete=models.CASCADE, related_name='company',
@@ -17,14 +36,23 @@ class Company(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True,
                             verbose_name="企業名")
 
-    staff_last_name = models.CharField(max_length=10, null=True, blank=True,
-                                       verbose_name="担当者:姓")
+    representative_name = models.CharField(max_length=10, null=True, blank=True,
+                                           verbose_name="代表者氏名")
 
-    staff_first_name = models.CharField(max_length=10, null=True, blank=True,
-                                        verbose_name="担当者:名")
+    establishment_date = models.DateField(null=True, blank=True,
+                                          verbose_name="設立日")
 
-    staff_department = models.CharField(max_length=20, null=True, blank=True,
-                                        verbose_name="担当者所属部署")
+    capital = models.IntegerField(null=True, blank=True,
+                                  verbose_name="資本金")
+
+    sales = models.IntegerField(null=True, blank=True,
+                                verbose_name="売上高")
+
+    employee_number = models.IntegerField(null=True, blank=True,
+                                          verbose_name="従業員数")
+
+    average_age = models.IntegerField(null=True, blank=True,
+                                      verbose_name="平均年齢")
 
     phone_number = models.CharField(max_length=20, null=True, blank=True,
                                     verbose_name="電話番号")
@@ -38,29 +66,8 @@ class Company(models.Model):
     closest_station_2 = models.CharField(max_length=20, null=True, blank=True,
                                          verbose_name="最寄り駅2")
 
-    needs_paper_invoice = models.BooleanField(default=False, null=True, blank=True,
-                                              verbose_name="紙ベース請求書要否")
-
     corporate_url = models.URLField(null=True, blank=True,
                                     verbose_name="企業のコーポレートURL")
-
-    start_office_hours = models.TimeField(null=True, blank=True,
-                                          verbose_name="就業の開始時間")
-
-    end_office_hours = models.TimeField(null=True, blank=True,
-                                        verbose_name="就業の終了時間")
-
-    contact_staff_last_name = models.CharField(max_length=10, null=True, blank=True,
-                                               verbose_name="請求書宛先担当者:姓")
-
-    contact_staff_first_name = models.CharField(max_length=10, null=True, blank=True,
-                                                verbose_name="請求書宛先担当者:名")
-
-    contact_staff_department = models.CharField(max_length=20, null=True, blank=True,
-                                                verbose_name="請求書宛先担当者:所属")
-
-    contact_staff_mail_address = models.EmailField(null=True, blank=True,
-                                                   verbose_name="請求書宛先メールアドレス")
 
     pr_comment = models.TextField(null=True, blank=True,
                                   verbose_name="企業のPRコメント")
@@ -75,54 +82,81 @@ class Company(models.Model):
         return f"{self.name}"
 
 
+class CompanyStaff(models.Model):
+    """企業の担当者など、Workerから検索されない情報を保存
+    """
+    company = models.ForeignKey(CompanyBasicInfo, on_delete=models.CASCADE, related_name='staff',
+                                verbose_name="担当者情報")
+
+    staff_last_name = models.CharField(max_length=10, null=True, blank=True,
+                                       verbose_name="担当者:姓")
+
+    staff_first_name = models.CharField(max_length=10, null=True, blank=True,
+                                        verbose_name="担当者:名")
+
+    staff_department = models.CharField(max_length=20, null=True, blank=True,
+                                        verbose_name="担当者所属部署")
+
+    staff_mail_address = models.EmailField(null=True, blank=True,
+                                           verbose_name="請求書宛先メールアドレス")
+
+    needs_paper_invoice = models.BooleanField(default=False, null=True, blank=True,
+                                              verbose_name="紙ベース請求書要否")
+
+    def __str__(self):
+        return f"{self.staff_last_name} {self.staff_first_name}"
+
+
 class Project(models.Model):
     """案件を表すクラス
     """
 
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='project',
+    company = models.ForeignKey(CompanyBasicInfo, on_delete=models.CASCADE, related_name='project',
                                 verbose_name="企業")
 
     name = models.CharField(max_length=20,
                             verbose_name="案件名")
 
-    min_fee = models.IntegerField(null=True, blank=True,
-                                  verbose_name="最小単金")
+    is_open = models.BooleanField(default=True,
+                                  verbose_name="募集しているか")
 
-    max_fee = models.IntegerField(null=True, blank=True,
-                                  verbose_name="最大単金")
+    min_fee = models.IntegerField(verbose_name="最小単金")
 
-    workplace = models.CharField(max_length=20, null=True, blank=True,
+    max_fee = models.IntegerField(verbose_name="最大単金")
+
+    workplace = models.CharField(max_length=50,
                                  verbose_name="作業場所(住所/ビル名など)")
 
-    closest_station = models.CharField(max_length=20, null=True, blank=True,
+    closest_station = models.CharField(max_length=20,
                                        verbose_name="最寄り駅")
 
-    start_term = models.DateField(null=True, blank=True,
-                                  verbose_name="開始時期(xxxx年mm月)")
+    start_term = models.DateField(verbose_name="開始時期(xxxx年mm月)")
 
     end_term = models.DateField(null=True, blank=True,
                                 verbose_name="終了時間(xxxx年mm月)")
 
-    start_time = models.TimeField(null=True, blank=True,
-                                  verbose_name="就業開始時間")
+    start_time = models.TimeField(verbose_name="就業開始時間")
 
-    end_time = models.TimeField(null=True, blank=True,
-                                verbose_name="就業終了時間")
+    end_time = models.TimeField(verbose_name="就業終了時間")
 
-    rest_time = models.TimeField(null=True, blank=True,
-                                 verbose_name="就業中の休憩時間")
+    rest_time = models.TimeField(verbose_name="就業中の休憩時間")
 
-    garments = models.CharField(max_length=20, null=True, blank=True,
-                                verbose_name="服装")
+    garments = models.IntegerField(choices=GARMENTS_CHOICES, default=0,
+                                   verbose_name="服装")
 
-    restroom = models.CharField(max_length=20, null=True, blank=True,
-                                verbose_name="トイレ")
+    restroom = models.IntegerField(choices=RESTROOM_CHOICES, default=0,
+                                   verbose_name="トイレ")
 
-    conditions = models.CharField(max_length=20, null=True, blank=True,
+    water_server = models.IntegerField(choices=USE_CHOICES, default=0,
+                                       verbose_name="ウォーターサーバなどの利用")
+
+    warter_supply_room = models.IntegerField(choices=USE_CHOICES, default=0,
+                                             verbose_name="給湯室などの利用")
+
+    conditions = models.CharField(max_length=50, null=True, blank=True,
                                   verbose_name="条件備考")
 
-    content = models.TextField(null=True, blank=True,
-                               verbose_name="作業内容")
+    content = models.TextField(verbose_name="作業内容")
 
     appeal = models.TextField(null=True, blank=True,
                               verbose_name="作業のアピール点")

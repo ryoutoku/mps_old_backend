@@ -29,13 +29,13 @@ WORK_STYLE_CHOICES = (
     (5, '週5日'),
 )
 
-ACCOUNT_TYPE_CHOICES = {
+ACCOUNT_CHOICES = {
     (0, '---未登録---'),
     (1, '普通預金'),
     (2, '当座預金')
 }
 
-SEX_TYPE_CHOICES = {
+SEX_CHOICES = {
     (0, '---未登録---'),
     (1, '男性'),
     (2, '女性')
@@ -91,7 +91,7 @@ class WorkerBasicInfo(models.Model):
     birth_day = models.DateField(null=True, blank=True,
                                  verbose_name="生年月日")
 
-    sex = models.IntegerField(choices=SEX_TYPE_CHOICES, null=False, blank=True, default=0,
+    sex = models.IntegerField(choices=SEX_CHOICES, null=False, blank=True, default=0,
                               verbose_name="性別")
 
     bank_name = models.CharField(max_length=50, null=True, blank=True,
@@ -100,7 +100,7 @@ class WorkerBasicInfo(models.Model):
     bank_office_code = models.CharField(validators=[bank_code_regex], max_length=3, null=True, blank=True,
                                         verbose_name="銀行支店コード")
 
-    bank_account_type = models.IntegerField(choices=ACCOUNT_TYPE_CHOICES, null=False, blank=True, default=0,
+    bank_account_type = models.IntegerField(choices=ACCOUNT_CHOICES, null=False, blank=True, default=0,
                                             verbose_name="口座種類")
 
     bank_account_number = models.CharField(validators=[bank_number_regex], max_length=7, null=True, blank=True,

@@ -7,7 +7,6 @@ from rest_framework import generics
 from rest_framework import status
 
 from .models import Question, Answer
-from company.models import Company
 from .selializer import QuestionSerializer, AnswerSerializer
 
 from utility.permission import CustomDictPermission, IsWorker
@@ -30,6 +29,10 @@ class QuestionViewSet(viewsets.GenericViewSet,
 
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        return queryset.first()
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -66,12 +69,15 @@ class AnswerViewSet(viewsets.GenericViewSet,
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        return queryset.first()
+
     def get_queryset(self):
         resume = Resume.objects.filter(account=self.request.user).all()
         question = Question.objects.filter(resume__in=resume).all()
         queryset = super().get_queryset()
-        queryset = queryset.filter(question__in=question)
-        return queryset
+        return queryset.filter(question__in=question).all()
 
     def perform_create(self, serializer):
         data = serializer.data

@@ -4,14 +4,15 @@ from django.forms import ValidationError, ModelForm
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
-from .models import Company, Project
+from .models import CompanyBasicInfo, CompanyStaff, Project
 from authentication.models import User
+from utility.admin_helper import get_model_link
 
 
-class CompanyAdminForm(ModelForm):
+class CompanyBasicInfoAdminForm(ModelForm):
 
     class Meta:
-        model = Company
+        model = CompanyBasicInfo
         fields = "__all__"
 
     def clean_account(self):
@@ -54,22 +55,69 @@ class NameFilter(admin.SimpleListFilter):
         return queryset.filter(name=None)
 
 
-@admin.register(Company)
-class CompanyAdmin(admin.ModelAdmin):
-    form = CompanyAdminForm
+@admin.register(CompanyBasicInfo)
+class CompanyBasicInfoAdmin(admin.ModelAdmin):
+    form = CompanyBasicInfoAdminForm
 
     list_display = ('name', 'account_name', 'is_activated', )
     list_filter = (NameFilter, 'is_activated')
 
-    _user_link_format = "<a href='../../authentication/user/{}/change'>{}<\a>"
-
     def account_name(self, obj):
-        return format_html(self._user_link_format, obj.account.id, str(obj.account))
+        account = obj.account
+        return get_model_link(account, str(account))
 
     account_name.admin_order_field = "account"
     account_name.short_description = "登録email"
 
 
+class CompanyStaffAdminForm(ModelForm):
+
+    class Meta:
+        model = CompanyStaff
+        fields = "__all__"
+
+    def clean_company(self):
+        """workerが正しく設定できているかの追加確認
+        """
+        company = self.cleaned_data["company"]
+        user = CompanyStaff.objects.filter(pk=company.id).first()
+
+        if not user:
+            raise ValidationError(_("you must set active worker"))
+
+        return company
+
+
+@admin.register(CompanyStaff)
+class CompanyStaffAdmin(admin.ModelAdmin):
+
+    list_display = ('company_name', 'needs_paper_invoice', 'staff_name',
+                    'staff_department', 'staff_mail_address', )
+    list_filter = ('needs_paper_invoice',)
+
+    def staff_name(self, obj):
+        return f"{obj.staff_last_name} {obj.staff_first_name}"
+
+    def company_name(self, obj):
+        company = obj.company
+        return get_model_link(company, str(company))
+
+    staff_name.admin_order_field = "staff_last_name"
+    staff_name.short_description = "担当者名"
+
+    company_name.admin_order_field = 'company'
+    company_name.short_description = "企業名"
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'company_name', 'name', 'is_open',
+                    'min_fee', 'max_fee', 'start_term', 'end_term')
+    list_filter = ('is_open',)
+
+    def company_name(self, obj):
+        company = obj.company
+        return get_model_link(company, str(company))
+
+    company_name.admin_order_field = 'company'
+    company_name.short_description = "企業名"

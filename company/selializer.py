@@ -2,32 +2,56 @@
 
 from rest_framework import serializers
 
-from .models import Company, Project
+from .models import CompanyBasicInfo, CompanyStaff, Project
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class CompanyBasicInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Company
+        model = CompanyBasicInfo
         fields = (
+            "is_activated",
             "name",
-            "staff_last_name",
-            "staff_first_name",
-            "staff_department",
+            "representative_name",
+            "establishment_date",
+            "capital",
+            "sales",
+            "employee_number",
+            "average_age",
             "phone_number",
             "address",
             "closest_station_1",
             "closest_station_2",
-            "needs_paper_invoice",
             "corporate_url",
-            "start_office_hours",
-            "end_office_hours",
-            "contact_staff_last_name",
-            "contact_staff_first_name",
-            "contact_staff_department",
-            "contact_staff_mail_address",
             "pr_comment",
             "pr_photo_1",
             "pr_photo_2",
+        )
+
+    def validate(self, attrs):
+        name = attrs["name"]
+        phone_number = attrs["phone_number"]
+        address = attrs["address"]
+
+        is_activated = True
+
+        if name is None or \
+                phone_number is None or \
+                address is None:
+            is_activated = False
+        attrs["is_activated"] = is_activated
+
+        return attrs
+
+
+class CompanyStaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyStaff
+        fields = (
+            "staff_last_name",
+            "staff_first_name",
+            "staff_department",
+            "staff_mail_address",
+            "needs_paper_invoice"
         )
 
 
