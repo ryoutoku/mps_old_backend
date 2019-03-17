@@ -130,6 +130,9 @@ class ResumeSerializer(serializers.ModelSerializer):
             "detail",
         )
 
+    def validate_id(self, id):
+        return -1
+
     def update(self, instance, validated_data):
         instance.project_name = validated_data.get(
             "project_name", instance.project_name)
@@ -141,6 +144,9 @@ class ResumeSerializer(serializers.ModelSerializer):
             "project_scale", instance.project_scale)
         instance.detail = validated_data.get(
             "detail", instance.detail)
+
+        # ManyToManyFieldと関連付ける場合、実体化が必要
+        instance.save()
 
         project_list = validated_data.pop("project_type")
         instance.project_type.clear()
@@ -164,10 +170,11 @@ class ResumeSerializer(serializers.ModelSerializer):
         instance.tools.clear()
         for tech_data in tech_list:
             tech = Technology.objects.filter(
-                name__iexact=tech_data["name"]).first()
+                tech_name__iexact=tech_data["tech_name"]).first()
 
             if tech is None:
-                tech = Technology.objects.create(name=tech_data["name"])
+                tech = Technology.objects.create(
+                    tech_name=tech_data["tech_name"])
                 tech.save()
 
             instance.tools.add(tech)
