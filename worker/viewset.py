@@ -81,10 +81,6 @@ class ResumeViewSet(viewsets.GenericViewSet,
     queryset = Resume.objects.all()
     serializer_class = ResumeSerializer
 
-    def get_object(self):
-        queryset = self.get_queryset()
-        return queryset.first()
-
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(worker=self.request.user.worker).all()
@@ -98,10 +94,16 @@ class ResumeViewSet(viewsets.GenericViewSet,
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        print(request.data)
+        print("create2")
         serializer.is_valid(raise_exception=True)
+        print("create3")
         worker = request.user.worker
+        print("create4")
         resume = Resume(worker=worker)
-        serializer.update(resume, serializer.data)
+        print("create5")
+        #serializer.update(resume, serializer.data)
+        print("create6")
         return Response(serializer.data)
 
 

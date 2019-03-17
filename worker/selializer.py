@@ -95,12 +95,16 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
 
         tech_list = validated_data.pop("interested_work")
 
+        print(validated_data)
+        print("update")
         for tech_data in tech_list:
+            print(tech_list)
             tech = Technology.objects.filter(
-                name__iexact=tech_data["name"]).first()
+                tech_name__iexact=tech_data["tech_name"]).first()
 
             if tech is None:
-                tech = Technology.objects.create(name=tech_data["name"])
+                tech = Technology.objects.create(
+                    tech_name=tech_data["tech_name"])
                 tech.save()
 
             instance.interested_work.add(tech)
