@@ -95,8 +95,7 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
 
         tech_list = validated_data.pop("interested_work")
 
-        print(validated_data)
-        print("update")
+        instance.interested_work.clear()
         for tech_data in tech_list:
             print(tech_list)
             tech = Technology.objects.filter(
@@ -112,38 +111,8 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ProjectTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjectType
-
-        fields = (
-            "project_type",
-        )
-
-
-class ChargeOfProcessSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChargeOfProcess
-
-        fields = (
-            "process_name",
-        )
-
-
-class RoleInProjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RoleInProject
-
-        fields = (
-            "role_name",
-        )
-
-
 class ResumeSerializer(serializers.ModelSerializer):
 
-    project_type = ProjectTypeSerializer(many=True)
-    charge_of_process = ChargeOfProcessSerializer(many=True)
-    role_in_project = RoleInProjectSerializer(many=True)
     tools = TechnologySerializer(many=True)
 
     class Meta:
@@ -174,21 +143,25 @@ class ResumeSerializer(serializers.ModelSerializer):
             "detail", instance.detail)
 
         project_list = validated_data.pop("project_type")
+        instance.project_type.clear()
         for proj_id in project_list:
             proj = ProjectType.objects.filter(pk=proj_id).first()
             instance.project_type.add(proj)
 
         process_list = validated_data.pop("charge_of_process")
+        instance.charge_of_process.clear()
         for proc_id in process_list:
             proc = ChargeOfProcess.objects.filter(pk=proc_id).first()
             instance.charge_of_process.add(proc)
 
         role_list = validated_data.pop("role_in_project")
+        instance.role_in_project.clear()
         for role_id in role_list:
             role = RoleInProject.objects.filter(pk=role_id).first()
             instance.role_in_project.add(role)
 
         tech_list = validated_data.pop("tools")
+        instance.tools.clear()
         for tech_data in tech_list:
             tech = Technology.objects.filter(
                 name__iexact=tech_data["name"]).first()
