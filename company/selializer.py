@@ -11,7 +11,8 @@ class CompanyBasicInfoSerializer(serializers.ModelSerializer):
         fields = (
             "is_activated",
             "name",
-            "representative_name",
+            "representative_last_name",
+            "representative_first_name",
             "establishment_date",
             "capital",
             "sales",
@@ -49,6 +50,8 @@ class CompanyStaffSerializer(serializers.ModelSerializer):
         fields = (
             "staff_last_name",
             "staff_first_name",
+            "staff_last_name_kana",
+            "staff_first_name_kana",
             "staff_department",
             "staff_mail_address",
             "needs_paper_invoice"
@@ -61,6 +64,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+            "is_open",
             "min_fee",
             "max_fee",
             "workplace",
