@@ -113,14 +113,14 @@ class WorkerBasicInfo(models.Model):
 class Technology(models.Model):
     """技術領域
     """
-    name = models.CharField(max_length=20,
-                            verbose_name="技術領域")
+    tech_name = models.CharField(max_length=20,
+                                 verbose_name="技術領域")
 
     def __str__(self):
-        return str(self.name)
+        return str(self.tech_name)
 
     class Meta:
-        ordering = ("name", )
+        ordering = ("tech_name", )
 
 
 class WorkerCondition(models.Model):
@@ -211,7 +211,7 @@ class Resume(models.Model):
     project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=False, blank=True, default=0,
                                         verbose_name="プロジェクトの規模(人数)")
 
-    tools = models.ManyToManyField(Technology, blank=True, null=True,
+    tools = models.ManyToManyField(Technology, blank=True,
                                    verbose_name="開発ツール、フレームワークなど")
 
     detail = models.TextField(
