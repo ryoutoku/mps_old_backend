@@ -211,7 +211,7 @@ class Resume(models.Model):
     project_scale = models.IntegerField(choices=PROJECT_SCALE_CHOICES, null=False, blank=True, default=0,
                                         verbose_name="プロジェクトの規模(人数)")
 
-    tools = models.ManyToManyField(Technology, blank=True,
+    tools = models.ManyToManyField(Technology, blank=True, null=True,
                                    verbose_name="開発ツール、フレームワークなど")
 
     detail = models.TextField(

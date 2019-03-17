@@ -126,3 +126,36 @@ class ResumeSerializer(serializers.ModelSerializer):
             "tools",
             "detail",
         )
+
+    def update(self, instance, validated_data):
+        instance.project_name = validated_data.get(
+            "project_name", instance.project_name)
+        instance.started_at = validated_data.get(
+            "started_at", instance.started_at)
+        instance.ended_at = validated_data.get(
+            "ended_at", instance.ended_at)
+        instance.project_type = validated_data.get(
+            "project_type", instance.project_type)
+        instance.charge_of_process = validated_data.get(
+            "charge_of_process", instance.charge_of_process)
+        instance.role_in_project = validated_data.get(
+            "role_in_project", instance.role_in_project)
+        instance.project_scale = validated_data.get(
+            "project_scale", instance.project_scale)
+        instance.detail = validated_data.get(
+            "detail", instance.detail)
+
+        tech_list = validated_data.pop("tools")
+
+        for tech_data in tech_list:
+            tech = Technology.objects.filter(
+                name__iexact=tech_data["name"]).first()
+
+            if tech is None:
+                tech = Technology.objects.create(name=tech_data["name"])
+                tech.save()
+
+            instance.tools.add(tech)
+
+        instance.save()
+        return instance

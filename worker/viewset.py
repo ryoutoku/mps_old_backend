@@ -89,6 +89,21 @@ class ResumeViewSet(viewsets.GenericViewSet,
         queryset = super().get_queryset()
         return queryset.filter(worker=self.request.user.worker).all()
 
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = self.get_object()
+        serializer.update(instance, serializer.data)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        worker = request.user.worker
+        resume = Resume(worker=worker)
+        serializer.update(resume, serializer.data)
+        return Response(serializer.data)
+
 
 class TechnologyViewSet(viewsets.GenericViewSet,
                         mixins.ListModelMixin):
