@@ -97,7 +97,6 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
 
         instance.interested_work.clear()
         for tech_data in tech_list:
-            print(tech_list)
             tech = Technology.objects.filter(
                 tech_name__iexact=tech_data["tech_name"]).first()
 
