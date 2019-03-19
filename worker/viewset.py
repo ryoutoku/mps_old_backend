@@ -69,7 +69,9 @@ class WorkerConditionViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         instance = self.get_object()
         serializer.update(instance, serializer.data)
-        return Response(serializer.data)
+
+        responseSerializer = WorkerConditionSerializer(instance)
+        return Response(responseSerializer.data)
 
 
 class ResumeViewSet(viewsets.GenericViewSet,
@@ -90,17 +92,21 @@ class ResumeViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         instance = self.get_object()
         serializer.update(instance, serializer.data)
-        return Response(serializer.data)
+
+        data = self.get_queryset()
+        response_serializer = self.serializer_class(data, many=True)
+        return Response(response_serializer.data)
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         worker = request.user.worker
         resume = Resume(worker=worker)
         serializer.update(resume, serializer.data)
-        print("5")
-        return Response(serializer.data)
+
+        data = self.get_queryset()
+        response_serializer = self.serializer_class(data, many=True)
+        return Response(response_serializer.data)
 
 
 class TechnologyViewSet(viewsets.GenericViewSet,
