@@ -34,10 +34,10 @@ class LoginViewSet(viewsets.GenericViewSet,
         login(request, user)
 
         if hasattr(request.user, "company"):
-            account = "company"
+            account = "2"
             is_activated = request.user.company.is_activated
         else:
-            account = "worker"
+            account = "1"
             is_activated = request.user.worker.is_activated
 
         return Response(
