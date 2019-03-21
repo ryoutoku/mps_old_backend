@@ -9,6 +9,7 @@ from .models import CompanyBasicInfo, CompanyStaff, Project
 from .selializer import CompanyBasicInfoSerializer, CompanyStaffSerializer, ProjectSerializer
 
 from utility.permission import IsCompany
+import time
 
 
 class CompanyBasicInfoViewSet(viewsets.GenericViewSet,
@@ -29,6 +30,7 @@ class CompanyBasicInfoViewSet(viewsets.GenericViewSet,
         return queryset
 
     def list(self, request, *args, **kwargs):
+        time.sleep(2)
         data = self.get_object()
         serializer = self.get_serializer(data)
         return Response(serializer.data)

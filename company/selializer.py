@@ -11,7 +11,8 @@ class CompanyBasicInfoSerializer(serializers.ModelSerializer):
         fields = (
             "is_activated",
             "name",
-            "representative_name",
+            "representative_last_name",
+            "representative_first_name",
             "establishment_date",
             "capital",
             "sales",
@@ -25,6 +26,7 @@ class CompanyBasicInfoSerializer(serializers.ModelSerializer):
             "pr_comment",
             "pr_photo_1",
             "pr_photo_2",
+            "needs_paper_invoice",
         )
 
     def validate(self, attrs):
@@ -51,7 +53,6 @@ class CompanyStaffSerializer(serializers.ModelSerializer):
             "staff_first_name",
             "staff_department",
             "staff_mail_address",
-            "needs_paper_invoice"
         )
 
 

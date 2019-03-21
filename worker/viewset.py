@@ -5,11 +5,15 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
+from django_filters.rest_framework import FilterSet, ChoiceFilter
 
 from .models import WorkerBasicInfo, WorkerCondition, Resume, Technology
+from .models import PROJECT_SCALE_CHOICES
 from .selializer import WorkerBasicInfoSerializer, WorkerConditionSerializer, ResumeSerializer, TechnologySerializer
 
-from utility.permission import IsWorker
+from utility.permission import IsWorker, IsCompany
+
+import time
 
 
 class WorkerBasicInfoViewSet(viewsets.GenericViewSet,
@@ -78,7 +82,7 @@ class ResumeViewSet(viewsets.GenericViewSet,
                     mixins.CreateModelMixin, mixins.ListModelMixin,
                     mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (SessionAuthentication, )
-    permission_classes = (IsAuthenticated and IsWorker,)
+    permission_classes = (IsAuthenticated and IsWorker, )
 
     queryset = Resume.objects.all()
     serializer_class = ResumeSerializer
@@ -116,3 +120,27 @@ class TechnologyViewSet(viewsets.GenericViewSet,
 
     queryset = Technology.objects.all()
     serializer_class = TechnologySerializer
+
+
+class SearchResumesFilter(FilterSet):
+    project_scale = ChoiceFilter(choices=PROJECT_SCALE_CHOICES)
+
+    class Meta:
+        model = Resume
+        fields = ("project_scale", )
+
+
+class SearchResumesViewSet(viewsets.GenericViewSet,
+                           mixins.ListModelMixin):
+    authentication_classes = (SessionAuthentication, )
+    permission_classes = (IsAuthenticated and IsCompany, )
+
+    queryset = Resume.objects.all()
+    serializer_class = ResumeSerializer
+    filter_class = SearchResumesFilter
+
+    def list(self, request, *args, **kwargs):
+        print(request)
+        print(args)
+        print(kwargs)
+        return super().list(request, *args, **kwargs)
