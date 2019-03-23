@@ -59,7 +59,8 @@ class NameFilter(admin.SimpleListFilter):
 class WorkerBasicInfoAdmin(admin.ModelAdmin):
     form = WorkerBasicInfoAdminForm
 
-    list_display = ("id", 'full_name', 'account_name', 'is_activated', )
+    list_display = ("id", 'full_name', 'nickname',
+                    'account_name', 'is_activated', )
     list_filter = (NameFilter, 'is_activated',)
 
     def full_name(self, obj):

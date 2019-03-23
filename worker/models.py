@@ -70,6 +70,9 @@ class WorkerBasicInfo(models.Model):
     is_activated = models.BooleanField(default=False,
                                        verbose_name="必須入力が完了したか否か")
 
+    nickname = models.CharField(max_length=20, null=True, blank=True,
+                                verbose_name="ニックネーム")
+
     last_name = models.CharField(max_length=10, null=True, blank=True,
                                  verbose_name="姓")
 

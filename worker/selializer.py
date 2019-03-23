@@ -12,6 +12,7 @@ class WorkerBasicInfoSerializer(serializers.ModelSerializer):
 
         fields = (
             "is_activated",
+            "nickname",
             "last_name",
             "last_name_kana",
             "first_name",
