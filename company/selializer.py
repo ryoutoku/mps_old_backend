@@ -26,6 +26,7 @@ class CompanyBasicInfoSerializer(serializers.ModelSerializer):
             "pr_comment",
             "pr_photo_1",
             "pr_photo_2",
+            "needs_paper_invoice",
         )
 
     def validate(self, attrs):
@@ -54,7 +55,6 @@ class CompanyStaffSerializer(serializers.ModelSerializer):
             "staff_first_name_kana",
             "staff_department",
             "staff_mail_address",
-            "needs_paper_invoice"
         )
 
 

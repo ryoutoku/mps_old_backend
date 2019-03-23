@@ -58,8 +58,9 @@ class NameFilter(admin.SimpleListFilter):
 class CompanyBasicInfoAdmin(admin.ModelAdmin):
     form = CompanyBasicInfoAdminForm
 
-    list_display = ('name', 'account_name', 'is_activated', )
-    list_filter = (NameFilter, 'is_activated')
+    list_display = ('name', 'account_name',
+                    'is_activated', 'needs_paper_invoice')
+    list_filter = (NameFilter, 'is_activated', 'needs_paper_invoice',)
 
     def account_name(self, obj):
         account = obj.account
@@ -90,9 +91,8 @@ class CompanyStaffAdminForm(ModelForm):
 @admin.register(CompanyStaff)
 class CompanyStaffAdmin(admin.ModelAdmin):
 
-    list_display = ('company_name', 'needs_paper_invoice', 'staff_name',
+    list_display = ('staff_name', 'company_name',
                     'staff_department', 'staff_mail_address', )
-    list_filter = ('needs_paper_invoice',)
 
     def staff_name(self, obj):
         return f"{obj.staff_last_name} {obj.staff_first_name}"

@@ -81,6 +81,9 @@ class CompanyBasicInfo(models.Model):
     pr_photo_2 = models.ImageField(upload_to='uploads/company/image', null=True, blank=True,
                                    verbose_name="企業のPR写真2")
 
+    needs_paper_invoice = models.BooleanField(default=False, null=True, blank=True,
+                                              verbose_name="紙ベース請求書要否")
+
     def __str__(self):
         return f"{self.name}"
 
@@ -108,9 +111,6 @@ class CompanyStaff(models.Model):
 
     staff_mail_address = models.EmailField(null=True, blank=True,
                                            verbose_name="請求書宛先メールアドレス")
-
-    needs_paper_invoice = models.BooleanField(default=False, null=True, blank=True,
-                                              verbose_name="紙ベース請求書要否")
 
     def __str__(self):
         return f"{self.staff_last_name} {self.staff_first_name}"
