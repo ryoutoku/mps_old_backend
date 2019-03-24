@@ -59,7 +59,7 @@ class NameFilter(admin.SimpleListFilter):
 class WorkerBasicInfoAdmin(admin.ModelAdmin):
     form = WorkerBasicInfoAdminForm
 
-    list_display = ("id", 'full_name', 'nickname',
+    list_display = ("id", 'full_name',
                     'account_name', 'is_activated', )
     list_filter = (NameFilter, 'is_activated',)
 
@@ -99,7 +99,7 @@ class WorkerConditionAdminForm(ModelForm):
 class WorkerConditionAdmin(admin.ModelAdmin):
     form = WorkerConditionAdminForm
 
-    list_display = ("id", "worker_name", )
+    list_display = ("id", "worker_name", "nickname")
 
     def worker_name(self, obj):
         worker = obj.worker

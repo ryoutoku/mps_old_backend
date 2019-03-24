@@ -12,7 +12,6 @@ class WorkerBasicInfoSerializer(serializers.ModelSerializer):
 
         fields = (
             "is_activated",
-            "nickname",
             "last_name",
             "last_name_kana",
             "first_name",
@@ -66,6 +65,7 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
 
         fields = (
             "is_open",
+            "nickname",
             "experience",
             "work_style",
             "working_status",
@@ -93,6 +93,8 @@ class WorkerConditionSerializer(serializers.ModelSerializer):
             "github_url", instance.github_url)
         instance.other_url = validated_data.get(
             "other_url", instance.other_url)
+        instance.nickname = validated_data.get(
+            "nickname", instance.nickname)
 
         tech_list = validated_data.pop("interested_work")
 
