@@ -75,11 +75,11 @@ class CompanyBasicInfo(models.Model):
     pr_comment = models.TextField(null=True, blank=True,
                                   verbose_name="企業のPRコメント")
 
-    pr_photo_1 = models.ImageField(upload_to='uploads/company/image', null=True, blank=True,
-                                   verbose_name="企業のPR写真1")
+    pr_photo_1 = models.TextField(null=True, blank=True,
+                                  verbose_name="企業のPR写真1(Base64)")
 
-    pr_photo_2 = models.ImageField(upload_to='uploads/company/image', null=True, blank=True,
-                                   verbose_name="企業のPR写真2")
+    pr_photo_2 = models.TextField(null=True, blank=True,
+                                  verbose_name="企業のPR写真2(Base64)")
 
     needs_paper_invoice = models.BooleanField(default=False, null=True, blank=True,
                                               verbose_name="紙ベース請求書要否")
