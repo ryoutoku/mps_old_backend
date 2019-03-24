@@ -5,6 +5,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework import status
 from django_filters.rest_framework import FilterSet, ChoiceFilter
 
 from .models import WorkerBasicInfo, WorkerCondition, Resume, Technology
@@ -111,6 +112,14 @@ class ResumeViewSet(viewsets.GenericViewSet,
         data = self.get_queryset()
         response_serializer = self.serializer_class(data, many=True)
         return Response(response_serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+
+        data = self.get_queryset()
+        response_serializer = self.serializer_class(data, many=True)
+        return Response(status=status.HTTP_202_ACCEPTED, data=response_serializer.data)
 
 
 class TechnologyViewSet(viewsets.GenericViewSet,
